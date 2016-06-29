@@ -1,0 +1,8 @@
+* Setup
+ outside of the project. do this:
+  ovi > ~ > .sbt > 0.13 $ pwd
+ /Users/ovi/.sbt/0.13
+  ovi > ~ > .sbt > 0.13 $ cat global.sbt
+ resolvers += "Artima Maven Repository" at "http://repo.artima.com/releases"
+
+* ScalaTest
