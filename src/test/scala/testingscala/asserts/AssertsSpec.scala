@@ -1,16 +1,18 @@
 package testingscala.asserts
 
-import org.scalatest.exceptions.TestCanceledException
+import org.scalatest.exceptions.{TestCanceledException, TestFailedException}
 import testingscala.BaseSpec
 
-class AssertsTest extends BaseSpec {
+class AssertsSpec extends BaseSpec {
 
   describe("assert gives better information on errors") {
     val left = 1
     val right = 2
 
     it("tells you exactly where the error was") {
-      assert(left == right)
+      intercept[TestFailedException] {
+        assert(left == right)
+      }
       /*
         1 did not equal 2
         ScalaTestFailureLocation: testingscala.asserts.AssertsTest$$anonfun$1$$anonfun$apply$mcV$sp$1 at (AssertsTest.scala:12)
@@ -21,7 +23,9 @@ class AssertsTest extends BaseSpec {
     }
 
     it("Scala's built-in assert is somewhat less useful") {
-      scala.Predef.assert(left == right)
+      intercept[AssertionError] {
+        scala.Predef.assert(left == right)
+      }
       /*
         assertion failed
         java.lang.AssertionError: assertion failed
@@ -32,8 +36,10 @@ class AssertsTest extends BaseSpec {
     }
 
     it("also provides assertResult as another style for asserting expected values") {
-      assertResult(2) {
-        right - left
+      intercept[TestFailedException] {
+        assertResult(2) {
+          right - left
+        }
       }
       /*
         Expected 2, but got 1

@@ -2,7 +2,7 @@ package testingscala.asserts
 
 import testingscala.BaseSpec
 
-class SuperSafeTest extends BaseSpec {
+class SuperSafeSpec extends BaseSpec {
 
   describe("safe comparisons with SuperSafe") {
 
