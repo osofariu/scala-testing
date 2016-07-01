@@ -9,43 +9,41 @@ class FixtureWithSpec extends FunSpec {
     val outcome = super.withFixture(test)
     outcome match {
       case result: Failed => {
-        alert("Alert Action on: Failed")
+        alert("*** ALERT on: Failed")
       }
       case result: Canceled => {
-        info("Info Action on: Canceled") // doesn't show up
+        info("*** INFO on: Canceled") // doesn't show up
       }
       case Succeeded => {
-        note("Note on: Succeeded")
+        note("*** NOTE on: Succeeded")
       }
       case Pending => {
-        markup("Document on Pending")
+        markup("*** MARKUP on Pending")
       }
     }
     outcome
   }
 
-  /*
-    protected def info: Informer
-    Returns an Informer that during test execution will forward strings passed to its apply method to the current reporter.
-    If invoked in a constructor, it will register the passed string for forwarding later during test execution.
-   */
 
-  describe("withFixture, I can perform clean-up after each test, taking into account result of the test") {
+  describe("withFixture, after each test I can alert about result of the test or can perform clean-up") {
 
-    it("reports success when the test succeeds") {
+    it("Notes success when the test succeeds") {
       assert(1 === 1)
     }
 
-    it("adds additional info when test fails") {
+    it("Alerts of errors when test fails") {
       fail("fail this test")
     }
 
-    it("reports cancelled when the test was cancelled") {
+    it("info of cancelled when the test was cancelled") {
       cancel("cancel this test")
     }
 
-    it("pends this test") {
-      pending
+    it("documents pending the test") (pending)
+
+
+   ignore ("will not get run.. like pending, but different!") {
+      fail("this couldn't possibly work")
     }
   }
 }
