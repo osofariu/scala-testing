@@ -1,37 +1,51 @@
 package testingscala.fixtures
 
-import org.scalatest.{FlatSpec, _}
+import org.scalatest._
 
-class FixtureWithSpec extends FlatSpec {
+class FixtureWithSpec extends FunSpec {
 
   override def withFixture(test: NoArgTest) = {
 
-    super.withFixture(test) match {
+    val outcome = super.withFixture(test)
+    outcome match {
       case result: Failed => {
-        info("************** FAILED ****************")
-        result
+        alert("Alert Action on: Failed")
       }
       case result: Canceled => {
-        info("************** CANCELED ****************")
-        result
+        info("Info Action on: Canceled") // doesn't show up
       }
-      case other => {
-        if (other.isSucceeded) {
-          info("************** SUCCEEDED ****************")
-        }
-        if (other.isPending) {
-          info("************** PENDING ****************")
-        }
-        other
+      case Succeeded => {
+        note("Note on: Succeeded")
+      }
+      case Pending => {
+        markup("Document on Pending")
       }
     }
+    outcome
   }
 
-  "withFixture"  should "add additional info when test fails" in {
-    assert(false)
-  }
+  /*
+    protected def info: Informer
+    Returns an Informer that during test execution will forward strings passed to its apply method to the current reporter.
+    If invoked in a constructor, it will register the passed string for forwarding later during test execution.
+   */
 
-  it should "be fine when the test succeeds" in {
-    assert(true)
+  describe("withFixture, I can perform clean-up after each test, taking into account result of the test") {
+
+    it("reports success when the test succeeds") {
+      assert(1 === 1)
+    }
+
+    it("adds additional info when test fails") {
+      fail("fail this test")
+    }
+
+    it("reports cancelled when the test was cancelled") {
+      cancel("cancel this test")
+    }
+
+    it("pends this test") {
+      pending
+    }
   }
 }
