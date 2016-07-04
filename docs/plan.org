@@ -1,5 +1,32 @@
-* What to demonstrate
-** scalatest
--  SuperSafe / examples
-- testing styles / examples
--
+* ScalaTest
+** DONE sbt setup - 7/2
+CLOSED: [2016-07-02 Sat 16:34]
+- getting started with build.sbt
+- using sbt to run tests
+- using tagging to run certain tests
+** TODO testing styles 7/4 - P1
+- what each style is good at (also FunSpec vs. path.FunSpec)
+- basic examples for intro
+- try to emphasize the "three" or so styles that are most interesting to me
+** TODO testing building blocks 7/4 - P2, P3
+- define base classes
+- asserts
+- using scalastic === (and TODO other parts)
+- SuperSafe / examples
+** TODO strategies for writing clean tests 7/4 - P3
+- get-fixture (refactor duplicate code)
+- fixture-context objects
+- loan-fixture
+- withFixture
+- BeforeAndAfter, BeforeAndAfterEach
+** TODO sharing tests (same tests with different fixtures) 7/4 - P4
+** TODO Matchers 7/4 - P5, P6
+** TODO Mocking 7/4-7/5 - P7, P8
+- Mockito (just say a couple of things, compare with ScalaMock)
+- ScalaMock
+** TODO Specs2 7/5
+- just basic coverage with some examples
+** TODO ScalaCheck 7/6-7/8
+- cover in as much depth as I have time for
+** TODO final touches, and presentation build-up 7/9-7/10
+** TODO presentation 7/11

@@ -1,4 +1,4 @@
-package testingscala
+package testingscala.scalacheck
 
 import org.scalacheck.{Prop, Properties}
 

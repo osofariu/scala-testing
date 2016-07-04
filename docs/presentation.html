@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="‘en’" xml:lang="‘en’">
+<head>
+<!-- 2016-07-04 Mon 12:21 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="viewport" content="width=device-width, initial-scale=1" />
+<title>Scala Testing</title>
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Ovi Sofariu" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link href="http://osofariu.github.io/css/solarized-light.css" rel="stylesheet"></link>
+<link href="http://osofariu.github.io/css/custom.css" rel="stylesheet"></link>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Scala Testing</h1>
+
+<div id="outline-container-orgheadline5" class="outline-2">
+<h2 id="orgheadline5">SBT Setup</h2>
+<div class="outline-text-2" id="text-orgheadline5">
+</div><div id="outline-container-orgheadline1" class="outline-3">
+<h3 id="orgheadline1">Setting-up the project in build.sbt</h3>
+<div class="outline-text-3" id="text-orgheadline1">
+<pre class="example">
+libraryDependencies ++=  Seq(
+  "org.scalatest"  %% "scalatest" % "3.0.0-RC3" % "test" withSources() withJavadoc(),
+  "org.scalactic"  %% "scalactic" % "3.0.0-RC3" % "test" withSources() withJavadoc(),
+  "org.scalacheck" %% "scalacheck" % "1.13.0"   % "test" withSources() withJavadoc()
+)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgheadline2" class="outline-3">
+<h3 id="orgheadline2">Setting-up Super-safe</h3>
+<div class="outline-text-3" id="text-orgheadline2">
+<p>
+<a href="http://www.scalatest.org/supersafe">SuperSafe</a> is a scala compiler plugin that catches certain issues at compile-time.<br  />
+</p>
+</div>
+
+<ul class="org-ul"><li><a id="orgheadline3"></a>add plugin for super-safe in project/plugins.sbt<br  /><div class="outline-text-4" id="text-orgheadline3">
+<pre class="example">
+addSbtPlugin("com.artima.supersafe" % "sbtplugin" % "1.1.0-RC7")
+</pre>
+</div></li>
+
+<li><a id="orgheadline4"></a>outside of the project, add resolver:<br  /><div class="outline-text-4" id="text-orgheadline4">
+<div class="org-src-container">
+
+<pre class="src src-sh">$ cd ~/.sbt/0.13
+$ cat <span style="color: #008000;">"resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/releases\""</span> &gt;&gt; global.sbt
+</pre>
+</div>
+</div></li></ul>
+</div>
+</div>
+
+<div id="outline-container-orgheadline14" class="outline-2">
+<h2 id="orgheadline14">Running tests</h2>
+<div class="outline-text-2" id="text-orgheadline14">
+</div><div id="outline-container-orgheadline8" class="outline-3">
+<h3 id="orgheadline8">SBT basics</h3>
+<div class="outline-text-3" id="text-orgheadline8">
+</div><ul class="org-ul"><li><a id="orgheadline6"></a>You can <b>chain</b> multiple commands to run tasks in batch mode, in sequential order:<br  /><div class="outline-text-4" id="text-orgheadline6">
+<pre class="example">
+sbt clean compile "testOnly TestA TestB"
+</pre>
+</div></li>
+
+<li><a id="orgheadline7"></a>You can continuously compile/test as you save your source files:<br  /><div class="outline-text-4" id="text-orgheadline7">
+<pre class="example">
+~ compile , ~ test
+~ testOnly *FunSpecSpec   // very useful when working on a spec
+</pre>
+<ul class="org-ul">
+<li>this is very cool: you get instant feedback as soon as you save code changes<br  /></li>
+<li>I use it with IntelliJ, running sbt under IntelliJ terminal window<br  /></li>
+</ul>
+</div></li></ul>
+</div>
+
+<div id="outline-container-orgheadline9" class="outline-3">
+<h3 id="orgheadline9">SBT command-line arguments</h3>
+<div class="outline-text-3" id="text-orgheadline9">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">task</th>
+<th scope="col" class="org-left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">clean</td>
+<td class="org-left">Deletes all generated files (in the target directory).</td>
+</tr>
+
+<tr>
+<td class="org-left">compile</td>
+<td class="org-left">Compiles the main sources (in src/main/scala and src/main/java</td>
+</tr>
+
+<tr>
+<td class="org-left">test</td>
+<td class="org-left">Compiles and runs all tests.</td>
+</tr>
+
+<tr>
+<td class="org-left">console</td>
+<td class="org-left">Starts the Scala interpreter with a classpath including compiled sources and all dependencies</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">To return to sbt, type :quit, Ctrl+D (Unix), or Ctrl+Z (Windows).</td>
+</tr>
+
+<tr>
+<td class="org-left">run &lt;argument&gt;</td>
+<td class="org-left">Runs the main class for the project in the same virtual machine as sbt.</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">package</td>
+<td class="org-left">Creates a jar file containing the files in src/main/resources and the</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">classes compiled from src/main/scala and src/main/java.</td>
+</tr>
+
+<tr>
+<td class="org-left">reload</td>
+<td class="org-left">Reloads the build definition (build.sbt, project/*.scala, project/*.sbt files).</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">Needed if you change the build definition.</td>
+</tr>
+
+<tr>
+<td class="org-left">help &lt;command&gt;</td>
+<td class="org-left">Displays detailed help for the specified command.</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">If no command is provided, displays brief descriptions of all commands.</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orgheadline13" class="outline-3">
+<h3 id="orgheadline13">SBT Tasks (from within sbt)</h3>
+<div class="outline-text-3" id="text-orgheadline13">
+</div><ul class="org-ul"><li><a id="orgheadline10"></a><b>test</b><br  /><div class="outline-text-4" id="text-orgheadline10">
+<ul class="org-ul">
+<li>The test task accepts no command line arguments and runs all tests<br  /></li>
+</ul>
+</div></li>
+
+<li><a id="orgheadline11"></a><b>testOnly</b><br  /><div class="outline-text-4" id="text-orgheadline11">
+<ul class="org-ul">
+<li>this task accepts a whitespace separated list of test names to run.<br  /></li>
+<li>before version 0.13 this task was "test-only". As of 0.13 they both work.<br  /></li>
+</ul>
+
+<pre class="example">
+testOnly testingscala.tags.FixtureWithSpec  testingscala.tags.TagTest
+</pre>
+
+<ul class="org-ul">
+<li><b>use wildcards</b> to run only certain tests by name:<br  /></li>
+</ul>
+<pre class="example">
+testOnly *FixtureWithSpec
+</pre>
+
+<ul class="org-ul">
+<li><b><b>use tags</b></b> to only run certain tests by tag:<br  /></li>
+</ul>
+
+<pre class="example">
+testOnly *TagTest -- -n FastTest  // only run tests tagged as "FastTest"
+testOnly *TagTest -- -n SlowTest -n FastTest // run both "SlowTest" and "FastTest" tags
+testOnly *TagTest -- -l SlowTest  // exclude tests tagged as "SlowTest"
+testOnly *TagTest -- -l SlowTest  // exclude these tags
+</pre>
+</div></li>
+
+<li><a id="orgheadline12"></a><b>testQuick</b> - like testOnly, but also takes into account additional filters:<br  /><div class="outline-text-4" id="text-orgheadline12">
+<ul class="org-ul">
+<li>The tests that failed in the previous run<br  /></li>
+<li>The tests that were not run before<br  /></li>
+<li>The tests that have one or more transitive dependencies, maybe in a different project,<br  />
+recompiled.<br  /></li>
+</ul>
+</div></li></ul>
+</div>
+</div>
+
+<div id="outline-container-orgheadline26" class="outline-2">
+<h2 id="orgheadline26">ScalaTest</h2>
+<div class="outline-text-2" id="text-orgheadline26">
+</div><div id="outline-container-orgheadline15" class="outline-3">
+<h3 id="orgheadline15">Testing Styles</h3>
+<div class="outline-text-3" id="text-orgheadline15">
+<p>
+<a href="http://www.scalatest.org/user_guide/selecting_a_style">http://www.scalatest.org/user_guide/selecting_a_style</a><br  />
+</p>
+</div>
+
+<ul class="org-ul"><li><a id="orgheadline16"></a><b>FunSpec</b><br  /><div class="outline-text-4" id="text-orgheadline16">
+<ul class="org-ul">
+<li>Familiar to those who are used to rpec.<br  /></li>
+<li>FunSpec allows you to nest your tests (like rspec)<br  /></li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">FunSpec</span>
+
+<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">FunSpec</span> {
+
+  describe(<span style="color: #008000;">"A Set"</span>) {
+    describe(<span style="color: #008000;">"when empty"</span>) {
+      it(<span style="color: #008000;">"should have size 0"</span>) {
+        assert(<span style="color: #D0372D;">Set</span>.empty.size == <span style="color: #D0372D;">0</span>)
+      }
+
+      it(<span style="color: #008000;">"should produce NoSuchElementException when head is invoked"</span>) {
+        intercept[<span style="color: #D0372D;">NoSuchElementException</span>] {
+          <span style="color: #D0372D;">Set</span>.empty.head
+        }
+      }
+    }
+  }
+}
+</pre>
+</div>
+
+<p>
+<b>Why is path.FunSpec is better than FunSpec?</b> See my <span class="underline">FunSpecSpec</span> for an example that<br  />
+demonstrates the difference<br  />
+</p>
+</div></li>
+
+<li><a id="orgheadline17"></a><b>FlatSpec</b><br  /><div class="outline-text-4" id="text-orgheadline17">
+<ul class="org-ul">
+<li>you can't next tests<br  /></li>
+<li>you use verbs like: must, should, can to make your tests more meaningful<br  /></li>
+<li>intuitive to use, but sometimes following the "subject should X" syntax is clumsy<br  /></li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">FlatSpec</span>
+
+<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">FlatSpec</span> {
+
+  <span style="color: #008000;">"An empty Set"</span> should <span style="color: #008000;">"have size 0"</span> in {
+    assert(<span style="color: #D0372D;">Set</span>.empty.size == <span style="color: #D0372D;">0</span>)
+  }
+
+  it should <span style="color: #008000;">"produce NoSuchElementException when head is invoked"</span> in {
+    intercept[<span style="color: #D0372D;">NoSuchElementException</span>] {
+      <span style="color: #D0372D;">Set</span>.empty.head
+    }
+  }
+}
+</pre>
+</div>
+
+<p>
+Output:<br  />
+</p>
+<pre class="example">
+An empty Set
+- should have size 0
+- should produce NoSuchElementException when head is invoked
+</pre>
+</div></li>
+
+<li><a id="orgheadline18"></a><b>FreeSpec</b><br  /><div class="outline-text-4" id="text-orgheadline18">
+<div class="org-src-container">
+
+<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">FreeSpec</span>
+
+<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">FreeSpec</span> {
+
+  <span style="color: #008000;">"A Set"</span> - {
+    <span style="color: #008000;">"when empty"</span> - {
+      <span style="color: #008000;">"should have size 0"</span> in {
+        assert(<span style="color: #D0372D;">Set</span>.empty.size == <span style="color: #D0372D;">0</span>)
+      }
+
+      <span style="color: #008000;">"should produce NoSuchElementException when head is invoked"</span> in {
+        intercept[<span style="color: #D0372D;">NoSuchElementException</span>] {
+          <span style="color: #D0372D;">Set</span>.empty.head
+        }
+      }
+    }
+  }
+}
+</pre>
+</div>
+</div></li>
+<li><a id="orgheadline19"></a><b>WordSpec</b><br  /><div class="outline-text-4" id="text-orgheadline19">
+<div class="org-src-container">
+
+<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">WordSpec</span>
+
+<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">WordSpec</span> {
+
+  <span style="color: #008000;">"A Set"</span> when {
+    <span style="color: #008000;">"empty"</span> should {
+      <span style="color: #008000;">"have size 0"</span> in {
+        assert(<span style="color: #D0372D;">Set</span>.empty.size == <span style="color: #D0372D;">0</span>)
+      }
+
+      <span style="color: #008000;">"produce NoSuchElementException when head is invoked"</span> in {
+        intercept[<span style="color: #D0372D;">NoSuchElementException</span>] {
+          <span style="color: #D0372D;">Set</span>.empty.head
+        }
+      }
+    }
+  }
+}
+</pre>
+</div>
+</div></li>
+
+<li><a id="orgheadline20"></a><b>Spec</b><br  /><div class="outline-text-4" id="text-orgheadline20">
+<div class="org-src-container">
+
+<pre class="src src-scala"></pre>
+</div>
+</div></li>
+<li><a id="orgheadline21"></a><b>FunSuite</b><br  /><div class="outline-text-4" id="text-orgheadline21">
+<ul class="org-ul">
+<li>For those who like xUnit-style tests<br  /></li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">FunSuite</span>
+
+<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSuite</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">FunSuite</span> {
+
+  test(<span style="color: #008000;">"An empty Set should have size 0"</span>) {
+    assert(<span style="color: #D0372D;">Set</span>.empty.size == <span style="color: #D0372D;">0</span>)
+  }
+
+  test(<span style="color: #008000;">"Invoking head on an empty Set should produce NoSuchElementException"</span>) {
+    intercept[<span style="color: #D0372D;">NoSuchElementException</span>] {
+      <span style="color: #D0372D;">Set</span>.empty.head
+    }
+  }
+}
+</pre>
+</div>
+</div></li>
+
+<li><a id="orgheadline22"></a><b>PropSpec</b><br  /><div class="outline-text-4" id="text-orgheadline22">
+<div class="org-src-container">
+
+<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #0000FF;">_</span>
+<span style="color: #0000FF;">import</span> prop.<span style="color: #0000FF;">_</span>
+<span style="color: #0000FF;">import</span> scala.collection.immutable.<span style="color: #0000FF;">_</span>
+
+<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">PropSpec</span> <span style="color: #0000FF;">with</span> <span style="color: #6434A3;">TableDrivenPropertyChecks</span> <span style="color: #0000FF;">with</span> <span style="color: #6434A3;">Matchers</span> {
+
+  <span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">examples</span> <span style="color: #0000FF;">=</span>
+    <span style="color: #D0372D;">Table</span>(
+      <span style="color: #008000;">"set"</span>,
+      <span style="color: #D0372D;">BitSet</span>.empty,
+      <span style="color: #D0372D;">HashSet</span>.empty[<span style="color: #D0372D;">Int</span>],
+      <span style="color: #D0372D;">TreeSet</span>.empty[<span style="color: #D0372D;">Int</span>]
+    )
+
+  property(<span style="color: #008000;">"an empty Set should have size 0"</span>) {
+    forAll(examples) { set <span style="color: #0000FF;">=&gt;</span>
+      set.size should be (<span style="color: #D0372D;">0</span>)
+    }
+  }
+
+  property(<span style="color: #008000;">"invoking head on an empty set should produce NoSuchElementException"</span>) {
+    forAll(examples) { set <span style="color: #0000FF;">=&gt;</span>
+       a [<span style="color: #D0372D;">NoSuchElementException</span>] should be thrownBy { set.head }
+    }
+  }
+}
+</pre>
+</div>
+</div></li></ul>
+</div>
+
+<div id="outline-container-orgheadline23" class="outline-3">
+<h3 id="orgheadline23">ScalaTest (from other preso)</h3>
+<div class="outline-text-3" id="text-orgheadline23">
+<ul class="org-ul">
+<li>interfaces with Junit and TestNG (demonstrate)<br  /></li>
+<li>two styles of asserts (demonstrate)<br  /></li>
+<li>several flavors of tests (examples)<br  />
+<ul class="org-ul">
+<li>FunSpec is the most basic<br  />
+<ul class="org-ul">
+<li>BDD - driven specification<br  /></li>
+<li>uses "describe" and "it"<br  /></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<ul class="org-ul"><li><a id="orgheadline24"></a>Scalactic<br  /><div class="outline-text-4" id="text-orgheadline24">
+<ul class="org-ul">
+<li>In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with "galactic").<br  /></li>
+<li>in 3.0 support Scala.JS<br  /></li>
+</ul>
+</div></li>
+<li><a id="orgheadline25"></a>3.0<br  /><div class="outline-text-4" id="text-orgheadline25">
+<ul class="org-ul">
+<li>now fully support Scala.js<br  /></li>
+<li>AsyncFunSuite, AsyncFunSpec, AsyncFlatSpec, AsyncFreeSpec, AsyncWordspec, and AsyncFeatureSpec<br  />
+(the result type of tests is Future[Assertion])<br  /></li>
+<li>oneElementOf, noElementsOf, atLeastOneElementOf, atMostOneElementOf, allElementsOf, inOrderElementsOf<br  /></li>
+<li>Added overloaded exists and forEvery methods to TableDrivenPropertyChecks.<br  /></li>
+</ul>
+</div></li></ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: July 11, 2016</p>
+<p class="author">Author: Ovi Sofariu</p>
+<p class="date">Created: 2016-07-04 Mon 12:21</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

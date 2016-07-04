@@ -1,6 +1,274 @@
-* Setup
- ** outside of the project. do this:
- - $ cd ~/.sbt/0.13
- - $ cat "resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/releases\"" > global.sbt
+#+TITLE:    Scala Testing
+#+AUTHOR:   Ovi Sofariu
+#+DATE:     July 11, 2016
+#+EMAIL:    ovi@sofariu.com
+#+LANGUAGE: ‘en’
+#+HTML_HEAD: <link href="http://osofariu.github.io/css/solarized-light.css" rel="stylesheet"></link>
+#+HTML_HEAD: <link href="http://osofariu.github.io/css/custom.css" rel="stylesheet"></link>
+#+OPTIONS: H:2 num:nil toc:nil d:t *:t ':t \n:t @:t ::t |:t ^:nil _:nil
+
+* SBT Setup
+** Setting-up the project in build.sbt
+#+begin_example
+libraryDependencies ++=  Seq(
+  "org.scalatest"  %% "scalatest" % "3.0.0-RC3" % "test" withSources() withJavadoc(),
+  "org.scalactic"  %% "scalactic" % "3.0.0-RC3" % "test" withSources() withJavadoc(),
+  "org.scalacheck" %% "scalacheck" % "1.13.0"   % "test" withSources() withJavadoc()
+)
+#+end_example
+
+** Setting-up Super-safe
+[[http://www.scalatest.org/supersafe][SuperSafe]] is a scala compiler plugin that catches certain issues at compile-time.
+
+*** add plugin for super-safe in project/plugins.sbt
+#+begin_example
+addSbtPlugin("com.artima.supersafe" % "sbtplugin" % "1.1.0-RC7")
+#+end_example
+
+*** outside of the project, add resolver:
+#+begin_src sh
+$ cd ~/.sbt/0.13
+$ cat "resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/releases\"" >> global.sbt
+#+end_src
+
+* Running tests
+** SBT basics
+*** You can *chain* multiple commands to run tasks in batch mode, in sequential order:
+#+begin_example
+ sbt clean compile "testOnly TestA TestB"
+#+end_example
+
+*** You can continuously compile/test as you save your source files:
+#+begin_example
+ ~ compile , ~ test
+ ~ testOnly *FunSpecSpec   // very useful when working on a spec
+#+end_example
+- this is very cool: you get instant feedback as soon as you save code changes
+- I use it with IntelliJ, running sbt under IntelliJ terminal window
+
+** SBT command-line arguments
+
+| task           | description                                                                                   |
+|----------------+-----------------------------------------------------------------------------------------------|
+| clean          | Deletes all generated files (in the target directory).                                        |
+| compile        | Compiles the main sources (in src/main/scala and src/main/java                                |
+| test           | Compiles and runs all tests.                                                                  |
+| console        | Starts the Scala interpreter with a classpath including compiled sources and all dependencies |
+|                | To return to sbt, type :quit, Ctrl+D (Unix), or Ctrl+Z (Windows).                             |
+| run <argument> | Runs the main class for the project in the same virtual machine as sbt.                       |
+|                |                                                                                               |
+| package        | Creates a jar file containing the files in src/main/resources and the                         |
+|                | classes compiled from src/main/scala and src/main/java.                                       |
+| reload         | Reloads the build definition (build.sbt, project/*.scala, project/*.sbt files).               |
+|                | Needed if you change the build definition.                                                    |
+| help <command> | Displays detailed help for the specified command.                                             |
+|                | If no command is provided, displays brief descriptions of all commands.                       |
+|                |                                                                                               |
+
+** SBT Tasks (from within sbt)
+*** *test*
+- The test task accepts no command line arguments and runs all tests
+
+*** *testOnly*
+- this task accepts a whitespace separated list of test names to run.
+- before version 0.13 this task was "test-only". As of 0.13 they both work.
+
+#+begin_example
+testOnly testingscala.tags.FixtureWithSpec  testingscala.tags.TagTest
+#+end_example
+
+- *use wildcards* to run only certain tests by name:
+#+begin_example
+testOnly *FixtureWithSpec
+#+end_example
+
+- **use tags** to only run certain tests by tag:
+
+#+begin_example
+testOnly *TagTest -- -n FastTest  // only run tests tagged as "FastTest"
+testOnly *TagTest -- -n SlowTest -n FastTest // run both "SlowTest" and "FastTest" tags
+testOnly *TagTest -- -l SlowTest  // exclude tests tagged as "SlowTest"
+testOnly *TagTest -- -l SlowTest  // exclude these tags
+#+end_example
+
+*** *testQuick* - like testOnly, but also takes into account additional filters:
+- The tests that failed in the previous run
+- The tests that were not run before
+- The tests that have one or more transitive dependencies, maybe in a different project,
+  recompiled.
 
 * ScalaTest
+** Testing Styles
+[[http://www.scalatest.org/user_guide/selecting_a_style]]
+
+*** *FunSpec*
+- Familiar to those who are used to rpec.
+- FunSpec allows you to nest your tests (like rspec)
+
+#+begin_src scala
+  import org.scalatest.FunSpec
+
+  class SetSpec extends FunSpec {
+
+    describe("A Set") {
+      describe("when empty") {
+        it("should have size 0") {
+          assert(Set.empty.size == 0)
+        }
+
+        it("should produce NoSuchElementException when head is invoked") {
+          intercept[NoSuchElementException] {
+            Set.empty.head
+          }
+        }
+      }
+    }
+  }
+#+end_src
+
+*Why is path.FunSpec is better than FunSpec?* See my _FunSpecSpec_ for an example that
+demonstrates the difference
+
+*** *FlatSpec*
+- you can't next tests
+- you use verbs like: must, should, can to make your tests more meaningful
+- intuitive to use, but sometimes following the "subject should X" syntax is clumsy
+
+#+begin_src scala
+    import org.scalatest.FlatSpec
+
+    class SetSpec extends FlatSpec {
+
+      "An empty Set" should "have size 0" in {
+        assert(Set.empty.size == 0)
+      }
+
+      it should "produce NoSuchElementException when head is invoked" in {
+        intercept[NoSuchElementException] {
+          Set.empty.head
+        }
+      }
+    }
+#+end_src
+
+Output:
+#+begin_example
+An empty Set
+- should have size 0
+- should produce NoSuchElementException when head is invoked
+#+end_example
+
+*** *FreeSpec*
+#+begin_src scala
+  import org.scalatest.FreeSpec
+
+  class SetSpec extends FreeSpec {
+
+    "A Set" - {
+      "when empty" - {
+        "should have size 0" in {
+          assert(Set.empty.size == 0)
+        }
+
+        "should produce NoSuchElementException when head is invoked" in {
+          intercept[NoSuchElementException] {
+            Set.empty.head
+          }
+        }
+      }
+    }
+  }
+#+end_src
+*** *WordSpec*
+#+begin_src scala
+  import org.scalatest.WordSpec
+
+  class SetSpec extends WordSpec {
+
+    "A Set" when {
+      "empty" should {
+        "have size 0" in {
+          assert(Set.empty.size == 0)
+        }
+
+        "produce NoSuchElementException when head is invoked" in {
+          intercept[NoSuchElementException] {
+            Set.empty.head
+          }
+        }
+      }
+    }
+  }
+#+end_src
+
+*** *Spec*
+#+begin_src scala
+#+end_src
+*** *FunSuite*
+- For those who like xUnit-style tests
+
+#+begin_src scala
+  import org.scalatest.FunSuite
+
+  class SetSuite extends FunSuite {
+
+    test("An empty Set should have size 0") {
+      assert(Set.empty.size == 0)
+    }
+
+    test("Invoking head on an empty Set should produce NoSuchElementException") {
+      intercept[NoSuchElementException] {
+        Set.empty.head
+      }
+    }
+  }
+#+end_src
+
+*** *PropSpec*
+
+#+begin_src scala
+
+import org.scalatest._
+import prop._
+import scala.collection.immutable._
+
+class SetSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
+
+  val examples =
+    Table(
+      "set",
+      BitSet.empty,
+      HashSet.empty[Int],
+      TreeSet.empty[Int]
+    )
+
+  property("an empty Set should have size 0") {
+    forAll(examples) { set =>
+      set.size should be (0)
+    }
+  }
+
+  property("invoking head on an empty set should produce NoSuchElementException") {
+    forAll(examples) { set =>
+       a [NoSuchElementException] should be thrownBy { set.head }
+    }
+  }
+}
+#+end_src
+
+** ScalaTest (from other preso)
+- interfaces with Junit and TestNG (demonstrate)
+- two styles of asserts (demonstrate)
+- several flavors of tests (examples)
+  - FunSpec is the most basic
+    - BDD - driven specification
+    - uses "describe" and "it"
+*** Scalactic
+- In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with "galactic").
+- in 3.0 support Scala.JS
+*** 3.0
+- now fully support Scala.js
+- AsyncFunSuite, AsyncFunSpec, AsyncFlatSpec, AsyncFreeSpec, AsyncWordspec, and AsyncFeatureSpec
+  (the result type of tests is Future[Assertion])
+- oneElementOf, noElementsOf, atLeastOneElementOf, atMostOneElementOf, allElementsOf, inOrderElementsOf
+- Added overloaded exists and forEvery methods to TableDrivenPropertyChecks.

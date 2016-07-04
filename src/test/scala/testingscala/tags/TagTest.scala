@@ -13,6 +13,7 @@ class TagTest extends BaseSpec {
 
   describe("custom tags allow me to select which tests to run") {
 
+    // you will likely want these in BaseSpec to re-use for all tests
     object SlowTest extends Tag("SlowTest")
     object FastTest extends Tag("FastTest")
 
