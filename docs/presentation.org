@@ -1,13 +1,15 @@
-#+TITLE:    Scala Testing
+#+TITLE:    Testing in Scala
 #+AUTHOR:   Ovi Sofariu
 #+DATE:     July 11, 2016
 #+EMAIL:    ovi@sofariu.com
-#+LANGUAGE: ‘en’
-#+HTML_HEAD: <link href="http://osofariu.github.io/css/solarized-light.css" rel="stylesheet"></link>
-#+HTML_HEAD: <link href="http://osofariu.github.io/css/custom.css" rel="stylesheet"></link>
+#+HTML_HEAD: <link href="https://osofariu.github.io/css/solarized-light.css" rel="stylesheet"></link>
+#+HTML_HEAD: <link href="https://osofariu.github.io/css/custom.css" rel="stylesheet"></link>
 #+OPTIONS: H:2 num:nil toc:nil d:t *:t ':t \n:t @:t ::t |:t ^:nil _:nil
 
+You can follow this presentation at: https://osofariu.github.io/preso/presentation.html
+
 * SBT Setup
+
 ** Setting-up the project in build.sbt
 #+begin_example
 libraryDependencies ++=  Seq(
@@ -31,7 +33,9 @@ $ cd ~/.sbt/0.13
 $ cat "resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/releases\"" >> global.sbt
 #+end_src
 
-* Running tests
+
+* Running tests with SBT
+
 ** SBT basics
 *** You can *chain* multiple commands to run tasks in batch mode, in sequential order:
 #+begin_example
@@ -97,12 +101,14 @@ testOnly *TagTest -- -l SlowTest  // exclude these tags
 - The tests that have one or more transitive dependencies, maybe in a different project,
   recompiled.
 
+
 * ScalaTest
+
 ** Testing Styles
 [[http://www.scalatest.org/user_guide/selecting_a_style]]
 
 *** *FunSpec*
-- Familiar to those who are used to rpec.
+- Familiar to those who are used to Rpec.
 - FunSpec allows you to nest your tests (like rspec)
 
 #+begin_src scala
@@ -159,27 +165,60 @@ An empty Set
 #+end_example
 
 *** *FreeSpec*
+- Facilitates a BDD-style, in which tests are nested inside text clauses denoted with the
+  dash operator (-).
+- It enforces no structure, so you have maximum flexibility
+
 #+begin_src scala
-  import org.scalatest.FreeSpec
+import org.scalatest.FreeSpec
 
-  class SetSpec extends FreeSpec {
-
-    "A Set" - {
-      "when empty" - {
-        "should have size 0" in {
-          assert(Set.empty.size == 0)
+class StackSpec extends FreeSpec {
+  "A Stack" - {
+    "whenever it is empty" - {
+      "certainly ought to" - {
+        "be empty" in {
+          // ...
         }
-
-        "should produce NoSuchElementException when head is invoked" in {
-          intercept[NoSuchElementException] {
-            Set.empty.head
-          }
+        "complain on peek" in {
+          // ...
+        }
+        "complain on pop" in {
+          // ...
         }
       }
     }
+    "but when full, by contrast, must" - {
+      "be full" in {
+        // ...
+      }
+      "complain on push" in {
+        // ...
+      }
+    }
   }
+}
+
 #+end_src
+
+Output:
+#+begin_example
+StackSpec:
+A Stack
+  whenever it is empty
+    certainly ought to
+    - be empty
+    - complain on peek
+    - complain on pop
+  but when full, by contrast, must
+  - be full
+  - complain on push
+#+end_example
+
 *** *WordSpec*
+- Familiar to those who are used to specs or specs2
+- Very prescriptive
+- Quite a bit more wordy
+
 #+begin_src scala
   import org.scalatest.WordSpec
 
@@ -201,9 +240,39 @@ An empty Set
   }
 #+end_src
 
+
+#+begin_example
+ SetTestWordSpec:
+ A Set
+   when empty
+   - should have size 0
+   - should produce NoSuchElementException when head is invoked
+
+#+end_example
+
 *** *Spec*
+
 #+begin_src scala
+import org.scalatest.Spec
+
+class SetSpec extends Spec {
+
+  object `A Set` {
+    object `when empty` {
+      def `should have size 0` {
+        assert(Set.empty.size == 0)
+      }
+
+      def `should produce NoSuchElementException when head is invoked` {
+        intercept[NoSuchElementException] {
+          Set.empty.head
+        }
+      }
+    }
+  }
+}
 #+end_src
+
 *** *FunSuite*
 - For those who like xUnit-style tests
 
@@ -256,17 +325,37 @@ class SetSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
 }
 #+end_src
 
+
+** Asserts/Inspectors
+** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors][Inspectors]]
+
+| forAll     |   | succeeds if the assertion holds true for every element                                     |
+| forAtLeast |   | succeeds if the assertion holds true for at least the specified number of elements         |
+| forAtMost  |   | succeeds if the assertion holds true for at most the specified number of elements          |
+| forBetween |   | succeeds if the assertion holds true for between the specified minimum and maximum         |
+|            |   | number of elements,  inclusive                                                             |
+| forEvery   |   | same as forAll, but lists all failing elements if it fails (forAll just reports the first) |
+| forExactly |   | succeeds if the assertion holds true for exactly the specified number of elements          |
+
+
+** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions][Assertions]]
+
+#+begin_src scala
+  import org.scalatest.Assertions._
+  val left = 2
+  val right = 1
+  assert(left == right)
+#+end_src
+
 ** ScalaTest (from other preso)
+
 - interfaces with Junit and TestNG (demonstrate)
 - two styles of asserts (demonstrate)
-- several flavors of tests (examples)
-  - FunSpec is the most basic
-    - BDD - driven specification
-    - uses "describe" and "it"
+*** sharing
 *** Scalactic
 - In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with "galactic").
 - in 3.0 support Scala.JS
-*** 3.0
+*** New in ScalaTest 3.0
 - now fully support Scala.js
 - AsyncFunSuite, AsyncFunSpec, AsyncFlatSpec, AsyncFreeSpec, AsyncWordspec, and AsyncFeatureSpec
   (the result type of tests is Future[Assertion])

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="‘en’" xml:lang="‘en’">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-07-04 Mon 12:21 -->
+<!-- 2016-07-04 Mon 18:55 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="viewport" content="width=device-width, initial-scale=1" />
-<title>Scala Testing</title>
+<title>Testing in Scala</title>
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Ovi Sofariu" />
 <style type="text/css">
@@ -94,8 +94,8 @@
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   /*]]>*/-->
 </style>
-<link href="http://osofariu.github.io/css/solarized-light.css" rel="stylesheet"></link>
-<link href="http://osofariu.github.io/css/custom.css" rel="stylesheet"></link>
+<link href="https://osofariu.github.io/css/solarized-light.css" rel="stylesheet"></link>
+<link href="https://osofariu.github.io/css/custom.css" rel="stylesheet"></link>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -145,7 +145,10 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">Scala Testing</h1>
+<h1 class="title">Testing in Scala</h1>
+<p>
+You can follow this presentation at: <a href="https://osofariu.github.io/preso/presentation.html">https://osofariu.github.io/preso/presentation.html</a><br  />
+</p>
 
 <div id="outline-container-orgheadline5" class="outline-2">
 <h2 id="orgheadline5">SBT Setup</h2>
@@ -188,8 +191,9 @@ $ cat <span style="color: #008000;">"resolvers += \"Artima Maven Repository\" at
 </div>
 </div>
 
+
 <div id="outline-container-orgheadline14" class="outline-2">
-<h2 id="orgheadline14">Running tests</h2>
+<h2 id="orgheadline14">Running tests with SBT</h2>
 <div class="outline-text-2" id="text-orgheadline14">
 </div><div id="outline-container-orgheadline8" class="outline-3">
 <h3 id="orgheadline8">SBT basics</h3>
@@ -316,7 +320,7 @@ sbt clean compile "testOnly TestA TestB"
 <li><a id="orgheadline11"></a><b>testOnly</b><br  /><div class="outline-text-4" id="text-orgheadline11">
 <ul class="org-ul">
 <li>this task accepts a whitespace separated list of test names to run.<br  /></li>
-<li>before version 0.13 this task was "test-only". As of 0.13 they both work.<br  /></li>
+<li>before version 0.13 this task was &ldquo;test-only&rdquo;. As of 0.13 they both work.<br  /></li>
 </ul>
 
 <pre class="example">
@@ -353,9 +357,10 @@ recompiled.<br  /></li>
 </div>
 </div>
 
-<div id="outline-container-orgheadline26" class="outline-2">
-<h2 id="orgheadline26">ScalaTest</h2>
-<div class="outline-text-2" id="text-orgheadline26">
+
+<div id="outline-container-orgheadline30" class="outline-2">
+<h2 id="orgheadline30">ScalaTest</h2>
+<div class="outline-text-2" id="text-orgheadline30">
 </div><div id="outline-container-orgheadline15" class="outline-3">
 <h3 id="orgheadline15">Testing Styles</h3>
 <div class="outline-text-3" id="text-orgheadline15">
@@ -366,7 +371,7 @@ recompiled.<br  /></li>
 
 <ul class="org-ul"><li><a id="orgheadline16"></a><b>FunSpec</b><br  /><div class="outline-text-4" id="text-orgheadline16">
 <ul class="org-ul">
-<li>Familiar to those who are used to rpec.<br  /></li>
+<li>Familiar to those who are used to Rpec.<br  /></li>
 <li>FunSpec allows you to nest your tests (like rspec)<br  /></li>
 </ul>
 
@@ -401,9 +406,9 @@ demonstrates the difference<br  />
 
 <li><a id="orgheadline17"></a><b>FlatSpec</b><br  /><div class="outline-text-4" id="text-orgheadline17">
 <ul class="org-ul">
-<li>you can't next tests<br  /></li>
+<li>you can&rsquo;t next tests<br  /></li>
 <li>you use verbs like: must, should, can to make your tests more meaningful<br  /></li>
-<li>intuitive to use, but sometimes following the "subject should X" syntax is clumsy<br  /></li>
+<li>intuitive to use, but sometimes following the &ldquo;subject should X&rdquo; syntax is clumsy<br  /></li>
 </ul>
 
 <div class="org-src-container">
@@ -436,30 +441,68 @@ An empty Set
 </div></li>
 
 <li><a id="orgheadline18"></a><b>FreeSpec</b><br  /><div class="outline-text-4" id="text-orgheadline18">
+<ul class="org-ul">
+<li>Facilitates a BDD-style, in which tests are nested inside text clauses denoted with the<br  />
+dash operator (-).<br  /></li>
+<li>It enforces no structure, so you have maximum flexibility<br  /></li>
+</ul>
+
 <div class="org-src-container">
 
 <pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">FreeSpec</span>
 
-<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">FreeSpec</span> {
-
-  <span style="color: #008000;">"A Set"</span> - {
-    <span style="color: #008000;">"when empty"</span> - {
-      <span style="color: #008000;">"should have size 0"</span> in {
-        assert(<span style="color: #D0372D;">Set</span>.empty.size == <span style="color: #D0372D;">0</span>)
-      }
-
-      <span style="color: #008000;">"should produce NoSuchElementException when head is invoked"</span> in {
-        intercept[<span style="color: #D0372D;">NoSuchElementException</span>] {
-          <span style="color: #D0372D;">Set</span>.empty.head
+<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">StackSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">FreeSpec</span> {
+  <span style="color: #008000;">"A Stack"</span> - {
+    <span style="color: #008000;">"whenever it is empty"</span> - {
+      <span style="color: #008000;">"certainly ought to"</span> - {
+        <span style="color: #008000;">"be empty"</span> in {
+          <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">...</span>
         }
+        <span style="color: #008000;">"complain on peek"</span> in {
+          <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">...</span>
+        }
+        <span style="color: #008000;">"complain on pop"</span> in {
+          <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">...</span>
+        }
+      }
+    }
+    <span style="color: #008000;">"but when full, by contrast, must"</span> - {
+      <span style="color: #008000;">"be full"</span> in {
+        <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">...</span>
+      }
+      <span style="color: #008000;">"complain on push"</span> in {
+        <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">...</span>
       }
     }
   }
 }
 </pre>
 </div>
+
+<p>
+Output:<br  />
+</p>
+<pre class="example">
+StackSpec:
+A Stack
+  whenever it is empty
+    certainly ought to
+    - be empty
+    - complain on peek
+    - complain on pop
+  but when full, by contrast, must
+  - be full
+  - complain on push
+</pre>
 </div></li>
+
 <li><a id="orgheadline19"></a><b>WordSpec</b><br  /><div class="outline-text-4" id="text-orgheadline19">
+<ul class="org-ul">
+<li>Familiar to those who are used to specs or specs2<br  /></li>
+<li>Very prescriptive<br  /></li>
+<li>Quite a bit more wordy<br  /></li>
+</ul>
+
 <div class="org-src-container">
 
 <pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">WordSpec</span>
@@ -482,14 +525,42 @@ An empty Set
 }
 </pre>
 </div>
+
+
+<pre class="example">
+SetTestWordSpec:
+A Set
+  when empty
+  - should have size 0
+  - should produce NoSuchElementException when head is invoked
+</pre>
 </div></li>
 
 <li><a id="orgheadline20"></a><b>Spec</b><br  /><div class="outline-text-4" id="text-orgheadline20">
 <div class="org-src-container">
 
-<pre class="src src-scala"></pre>
+<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">Spec</span>
+
+<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">Spec</span> {
+
+  <span style="color: #0000FF;">object</span> `<span style="color: #D0372D;">A</span> <span style="color: #D0372D;">Set</span>` {
+    <span style="color: #0000FF;">object</span> `when empty` {
+      <span style="color: #0000FF;">def</span> `should have size <span style="color: #D0372D;">0</span>` {
+        assert(<span style="color: #D0372D;">Set</span>.empty.size == <span style="color: #D0372D;">0</span>)
+      }
+
+      <span style="color: #0000FF;">def</span> `should produce <span style="color: #D0372D;">NoSuchElementException</span> when head is invoked` {
+        intercept[<span style="color: #D0372D;">NoSuchElementException</span>] {
+          <span style="color: #D0372D;">Set</span>.empty.head
+        }
+      }
+    }
+  }
+}
+</pre>
 </div>
 </div></li>
+
 <li><a id="orgheadline21"></a><b>FunSuite</b><br  /><div class="outline-text-4" id="text-orgheadline21">
 <ul class="org-ul">
 <li>For those who like xUnit-style tests<br  /></li>
@@ -549,29 +620,101 @@ An empty Set
 </div></li></ul>
 </div>
 
+
 <div id="outline-container-orgheadline23" class="outline-3">
-<h3 id="orgheadline23">ScalaTest (from other preso)</h3>
-<div class="outline-text-3" id="text-orgheadline23">
+<h3 id="orgheadline23">Asserts/Inspectors</h3>
+</div>
+<div id="outline-container-orgheadline24" class="outline-3">
+<h3 id="orgheadline24"><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors">Inspectors</a></h3>
+<div class="outline-text-3" id="text-orgheadline24">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">forAll</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">succeeds if the assertion holds true for every element</td>
+</tr>
+
+<tr>
+<td class="org-left">forAtLeast</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">succeeds if the assertion holds true for at least the specified number of elements</td>
+</tr>
+
+<tr>
+<td class="org-left">forAtMost</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">succeeds if the assertion holds true for at most the specified number of elements</td>
+</tr>
+
+<tr>
+<td class="org-left">forBetween</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">succeeds if the assertion holds true for between the specified minimum and maximum</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">number of elements,  inclusive</td>
+</tr>
+
+<tr>
+<td class="org-left">forEvery</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">same as forAll, but lists all failing elements if it fails (forAll just reports the first)</td>
+</tr>
+
+<tr>
+<td class="org-left">forExactly</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">succeeds if the assertion holds true for exactly the specified number of elements</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-orgheadline25" class="outline-3">
+<h3 id="orgheadline25"><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions">Assertions</a></h3>
+<div class="outline-text-3" id="text-orgheadline25">
+<div class="org-src-container">
+
+<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">Assertions</span>.<span style="color: #0000FF;">_</span>
+<span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">left</span> <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">2</span>
+<span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">right</span> <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">1</span>
+assert(left == right)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline26" class="outline-3">
+<h3 id="orgheadline26">ScalaTest (from other preso)</h3>
+<div class="outline-text-3" id="text-orgheadline26">
 <ul class="org-ul">
 <li>interfaces with Junit and TestNG (demonstrate)<br  /></li>
 <li>two styles of asserts (demonstrate)<br  /></li>
-<li>several flavors of tests (examples)<br  />
-<ul class="org-ul">
-<li>FunSpec is the most basic<br  />
-<ul class="org-ul">
-<li>BDD - driven specification<br  /></li>
-<li>uses "describe" and "it"<br  /></li>
-</ul></li>
-</ul></li>
 </ul>
 </div>
-<ul class="org-ul"><li><a id="orgheadline24"></a>Scalactic<br  /><div class="outline-text-4" id="text-orgheadline24">
+<ul class="org-ul"><li><a id="orgheadline27"></a>sharing<br  /></li>
+<li><a id="orgheadline28"></a>Scalactic<br  /><div class="outline-text-4" id="text-orgheadline28">
 <ul class="org-ul">
-<li>In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with "galactic").<br  /></li>
+<li>In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with &ldquo;galactic&rdquo;).<br  /></li>
 <li>in 3.0 support Scala.JS<br  /></li>
 </ul>
 </div></li>
-<li><a id="orgheadline25"></a>3.0<br  /><div class="outline-text-4" id="text-orgheadline25">
+<li><a id="orgheadline29"></a>New in ScalaTest 3.0<br  /><div class="outline-text-4" id="text-orgheadline29">
 <ul class="org-ul">
 <li>now fully support Scala.js<br  /></li>
 <li>AsyncFunSuite, AsyncFunSpec, AsyncFlatSpec, AsyncFreeSpec, AsyncWordspec, and AsyncFeatureSpec<br  />
@@ -586,7 +729,7 @@ An empty Set
 <div id="postamble" class="status">
 <p class="date">Date: July 11, 2016</p>
 <p class="author">Author: Ovi Sofariu</p>
-<p class="date">Created: 2016-07-04 Mon 12:21</p>
+<p class="date">Created: 2016-07-04 Mon 18:55</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
