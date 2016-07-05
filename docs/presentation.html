@@ -3,30 +3,23 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-07-05 Tue 08:14 -->
-<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta  name="viewport" content="width=device-width, initial-scale=1" />
 <title>Testing in Scala</title>
+<!-- 2016-07-05 Tue 12:34 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Ovi Sofariu" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
-  .title  { text-align: center;
-             margin-bottom: .2em; }
-  .subtitle { text-align: center;
-              font-size: medium;
-              font-weight: bold;
-              margin-top:0; }
+  .title  { text-align: center; }
   .todo   { font-family: monospace; color: red; }
-  .done   { font-family: monospace; color: green; }
-  .priority { font-family: monospace; color: orange; }
+  .done   { color: green; }
   .tag    { background-color: #eee; font-family: monospace;
             padding: 2px; font-size: 80%; font-weight: normal; }
   .timestamp { color: #bebebe; }
   .timestamp-kwd { color: #5f9ea0; }
-  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
-  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
-  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
   .underline { text-decoration: underline; }
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
@@ -65,14 +58,15 @@
   caption.t-above { caption-side: top; }
   caption.t-bottom { caption-side: bottom; }
   td, th { vertical-align:top;  }
-  th.org-right  { text-align: center;  }
-  th.org-left   { text-align: center;   }
-  th.org-center { text-align: center; }
-  td.org-right  { text-align: right;  }
-  td.org-left   { text-align: left;   }
-  td.org-center { text-align: center; }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
   dt { font-weight: bold; }
-  .footpara { display: inline; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
@@ -150,12 +144,12 @@ for the JavaScript code in this tag.
 You can follow this presentation at: <a href="https://osofariu.github.io/preso/presentation.html">https://osofariu.github.io/preso/presentation.html</a><br  />
 </p>
 
-<div id="outline-container-orgheadline5" class="outline-2">
-<h2 id="orgheadline5">SBT Setup</h2>
-<div class="outline-text-2" id="text-orgheadline5">
-</div><div id="outline-container-orgheadline1" class="outline-3">
-<h3 id="orgheadline1">Setting-up the project in build.sbt</h3>
-<div class="outline-text-3" id="text-orgheadline1">
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">SBT Setup</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1">Setting-up the project in build.sbt</h3>
+<div class="outline-text-3" id="text-1-1">
 <pre class="example">
 libraryDependencies ++=  Seq(
   "org.scalatest"  %% "scalatest" % "3.0.0-RC3" % "test" withSources() withJavadoc(),
@@ -166,161 +160,172 @@ libraryDependencies ++=  Seq(
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-3">
-<h3 id="orgheadline2">Setting-up Super-safe</h3>
-<div class="outline-text-3" id="text-orgheadline2">
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2">Setting-up Super-safe</h3>
+<div class="outline-text-3" id="text-1-2">
 <p>
 <a href="http://www.scalatest.org/supersafe">SuperSafe</a> is a scala compiler plugin that catches certain issues at compile-time.<br  />
 </p>
 </div>
 
-<ul class="org-ul"><li><a id="orgheadline3"></a>add plugin for super-safe in project/plugins.sbt<br  /><div class="outline-text-4" id="text-orgheadline3">
+<ul class="org-ul"><li><a id="sec-1-2-1" name="sec-1-2-1"></a>add plugin for super-safe in project/plugins.sbt<br  /><div class="outline-text-4" id="text-1-2-1">
 <pre class="example">
 addSbtPlugin("com.artima.supersafe" % "sbtplugin" % "1.1.0-RC7")
 </pre>
-</div></li>
+</div>
+</li>
 
-<li><a id="orgheadline4"></a>outside of the project, add resolver:<br  /><div class="outline-text-4" id="text-orgheadline4">
+<li><a id="sec-1-2-2" name="sec-1-2-2"></a>outside of the project, add resolver:<br  /><div class="outline-text-4" id="text-1-2-2">
+<ul class="org-ul">
+<li>If you want to import the project from GitHub into Intellij, <b>you need to do this step first</b>,<br  />
+so it can find the plugin when setting up the project.<br  />
+</li>
+</ul>
+
 <div class="org-src-container">
 
 <pre class="src src-sh">$ cd ~/.sbt/0.13
-$ cat <span style="color: #008000;">"resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/releases\""</span> &gt;&gt; global.sbt
+$ echo "resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/releases\"" &gt;&gt; global.sbt
 </pre>
 </div>
-</div></li></ul>
+</div>
+</li></ul>
 </div>
 </div>
 
 
-<div id="outline-container-orgheadline14" class="outline-2">
-<h2 id="orgheadline14">Running tests with SBT</h2>
-<div class="outline-text-2" id="text-orgheadline14">
-</div><div id="outline-container-orgheadline8" class="outline-3">
-<h3 id="orgheadline8">SBT basics</h3>
-<div class="outline-text-3" id="text-orgheadline8">
-</div><ul class="org-ul"><li><a id="orgheadline6"></a>You can <b>chain</b> multiple commands to run tasks in batch mode, in sequential order:<br  /><div class="outline-text-4" id="text-orgheadline6">
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Running tests with SBT</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1">SBT basics</h3>
+<div class="outline-text-3" id="text-2-1">
+</div><ul class="org-ul"><li><a id="sec-2-1-1" name="sec-2-1-1"></a>You can <b>chain</b> multiple commands to run tasks in batch mode, in sequential order:<br  /><div class="outline-text-4" id="text-2-1-1">
 <pre class="example">
 sbt clean compile "testOnly TestA TestB"
 </pre>
-</div></li>
+</div>
+</li>
 
-<li><a id="orgheadline7"></a>You can continuously compile/test as you save your source files:<br  /><div class="outline-text-4" id="text-orgheadline7">
+<li><a id="sec-2-1-2" name="sec-2-1-2"></a>You can continuously compile/test as you save your source files:<br  /><div class="outline-text-4" id="text-2-1-2">
 <pre class="example">
 ~ compile , ~ test
 ~ testOnly *FunSpecSpec   // very useful when working on a spec
 </pre>
 <ul class="org-ul">
-<li>this is very cool: you get instant feedback as soon as you save code changes<br  /></li>
-<li>I use it with IntelliJ, running sbt under IntelliJ terminal window<br  /></li>
+<li>this is very cool: you get instant feedback as soon as you save code changes<br  />
+</li>
+<li>I use it with IntelliJ, running sbt under IntelliJ terminal window<br  />
+</li>
 </ul>
-</div></li></ul>
+</div>
+</li></ul>
 </div>
 
-<div id="outline-container-orgheadline9" class="outline-3">
-<h3 id="orgheadline9">SBT command-line arguments</h3>
-<div class="outline-text-3" id="text-orgheadline9">
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2">SBT command-line arguments</h3>
+<div class="outline-text-3" id="text-2-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
 <colgroup>
-<col  class="org-left" />
+<col  class="left" />
 
-<col  class="org-left" />
+<col  class="left" />
 </colgroup>
 <thead>
 <tr>
-<th scope="col" class="org-left">task</th>
-<th scope="col" class="org-left">description</th>
+<th scope="col" class="left">task</th>
+<th scope="col" class="left">description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="org-left">clean</td>
-<td class="org-left">Deletes all generated files (in the target directory).</td>
+<td class="left">clean</td>
+<td class="left">Deletes all generated files (in the target directory).</td>
 </tr>
 
 <tr>
-<td class="org-left">compile</td>
-<td class="org-left">Compiles the main sources (in src/main/scala and src/main/java</td>
+<td class="left">compile</td>
+<td class="left">Compiles the main sources (in src/main/scala and src/main/java</td>
 </tr>
 
 <tr>
-<td class="org-left">test</td>
-<td class="org-left">Compiles and runs all tests.</td>
+<td class="left">test</td>
+<td class="left">Compiles and runs all tests.</td>
 </tr>
 
 <tr>
-<td class="org-left">console</td>
-<td class="org-left">Starts the Scala interpreter with a classpath including compiled sources and all dependencies</td>
+<td class="left">console</td>
+<td class="left">Starts the Scala interpreter with a classpath including compiled sources and all dependencies</td>
 </tr>
 
 <tr>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">To return to sbt, type :quit, Ctrl+D (Unix), or Ctrl+Z (Windows).</td>
+<td class="left">&#xa0;</td>
+<td class="left">To return to sbt, type :quit, Ctrl+D (Unix), or Ctrl+Z (Windows).</td>
 </tr>
 
 <tr>
-<td class="org-left">run &lt;argument&gt;</td>
-<td class="org-left">Runs the main class for the project in the same virtual machine as sbt.</td>
+<td class="left">run &lt;argument&gt;</td>
+<td class="left">Runs the main class for the project in the same virtual machine as sbt.</td>
 </tr>
 
 <tr>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
 </tr>
 
 <tr>
-<td class="org-left">package</td>
-<td class="org-left">Creates a jar file containing the files in src/main/resources and the</td>
+<td class="left">package</td>
+<td class="left">Creates a jar file containing the files in src/main/resources and the</td>
 </tr>
 
 <tr>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">classes compiled from src/main/scala and src/main/java.</td>
+<td class="left">&#xa0;</td>
+<td class="left">classes compiled from src/main/scala and src/main/java.</td>
 </tr>
 
 <tr>
-<td class="org-left">reload</td>
-<td class="org-left">Reloads the build definition (build.sbt, project/*.scala, project/*.sbt files).</td>
+<td class="left">reload</td>
+<td class="left">Reloads the build definition (build.sbt, project/*.scala, project/*.sbt files).</td>
 </tr>
 
 <tr>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">Needed if you change the build definition.</td>
+<td class="left">&#xa0;</td>
+<td class="left">Needed if you change the build definition.</td>
 </tr>
 
 <tr>
-<td class="org-left">help &lt;command&gt;</td>
-<td class="org-left">Displays detailed help for the specified command.</td>
+<td class="left">help &lt;command&gt;</td>
+<td class="left">Displays detailed help for the specified command.</td>
 </tr>
 
 <tr>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">If no command is provided, displays brief descriptions of all commands.</td>
-</tr>
-
-<tr>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">If no command is provided, displays brief descriptions of all commands.</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 
-<div id="outline-container-orgheadline13" class="outline-3">
-<h3 id="orgheadline13">SBT Tasks (from within sbt)</h3>
-<div class="outline-text-3" id="text-orgheadline13">
-</div><ul class="org-ul"><li><a id="orgheadline10"></a><b>test</b><br  /><div class="outline-text-4" id="text-orgheadline10">
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3">SBT Tasks (from within sbt)</h3>
+<div class="outline-text-3" id="text-2-3">
+</div><ul class="org-ul"><li><a id="sec-2-3-1" name="sec-2-3-1"></a><b>test</b><br  /><div class="outline-text-4" id="text-2-3-1">
 <ul class="org-ul">
-<li>The test task accepts no command line arguments and runs all tests<br  /></li>
+<li>The test task accepts no command line arguments and runs all tests<br  />
+</li>
 </ul>
-</div></li>
+</div>
+</li>
 
-<li><a id="orgheadline11"></a><b>testOnly</b><br  /><div class="outline-text-4" id="text-orgheadline11">
+<li><a id="sec-2-3-2" name="sec-2-3-2"></a><b>testOnly</b><br  /><div class="outline-text-4" id="text-2-3-2">
 <ul class="org-ul">
-<li>this task accepts a whitespace separated list of test names to run.<br  /></li>
-<li>before version 0.13 this task was &ldquo;test-only&rdquo;. As of 0.13 they both work.<br  /></li>
+<li>this task accepts a whitespace separated list of test names to run.<br  />
+</li>
+<li>before version 0.13 this task was &ldquo;test-only&rdquo;. As of 0.13 they both work.<br  />
+</li>
 </ul>
 
 <pre class="example">
@@ -328,14 +333,16 @@ testOnly testingscala.tags.FixtureWithSpec  testingscala.tags.TagTest
 </pre>
 
 <ul class="org-ul">
-<li><b>use wildcards</b> to run only certain tests by name:<br  /></li>
+<li><b>use wildcards</b> to run only certain tests by name:<br  />
+</li>
 </ul>
 <pre class="example">
 testOnly *FixtureWithSpec
 </pre>
 
 <ul class="org-ul">
-<li><b><b>use tags</b></b> to only run certain tests by tag:<br  /></li>
+<li><b><b>use tags</b></b> to only run certain tests by tag:<br  />
+</li>
 </ul>
 
 <pre class="example">
@@ -344,52 +351,59 @@ testOnly *TagTest -- -n SlowTest -n FastTest // run both "SlowTest" and "FastTes
 testOnly *TagTest -- -l SlowTest  // exclude tests tagged as "SlowTest"
 testOnly *TagTest -- -l SlowTest  // exclude these tags
 </pre>
-</div></li>
+</div>
+</li>
 
-<li><a id="orgheadline12"></a><b>testQuick</b> - like testOnly, but also takes into account additional filters:<br  /><div class="outline-text-4" id="text-orgheadline12">
+<li><a id="sec-2-3-3" name="sec-2-3-3"></a><b>testQuick</b> - like testOnly, but also takes into account additional filters:<br  /><div class="outline-text-4" id="text-2-3-3">
 <ul class="org-ul">
-<li>The tests that failed in the previous run<br  /></li>
-<li>The tests that were not run before<br  /></li>
+<li>The tests that failed in the previous run<br  />
+</li>
+<li>The tests that were not run before<br  />
+</li>
 <li>The tests that have one or more transitive dependencies, maybe in a different project,<br  />
-recompiled.<br  /></li>
+recompiled.<br  />
+</li>
 </ul>
-</div></li></ul>
+</div>
+</li></ul>
 </div>
 </div>
 
 
-<div id="outline-container-orgheadline46" class="outline-2">
-<h2 id="orgheadline46">ScalaTest</h2>
-<div class="outline-text-2" id="text-orgheadline46">
-</div><div id="outline-container-orgheadline15" class="outline-3">
-<h3 id="orgheadline15">Testing Styles</h3>
-<div class="outline-text-3" id="text-orgheadline15">
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">ScalaTest</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">Testing Styles</h3>
+<div class="outline-text-3" id="text-3-1">
 <p>
 <a href="http://www.scalatest.org/user_guide/selecting_a_style">http://www.scalatest.org/user_guide/selecting_a_style</a><br  />
 </p>
 </div>
 
-<ul class="org-ul"><li><a id="orgheadline16"></a><b>FunSpec</b><br  /><div class="outline-text-4" id="text-orgheadline16">
+<ul class="org-ul"><li><a id="sec-3-1-1" name="sec-3-1-1"></a><b>FunSpec</b><br  /><div class="outline-text-4" id="text-3-1-1">
 <ul class="org-ul">
-<li>Familiar to those who are used to Rpec.<br  /></li>
-<li>FunSpec allows you to nest your tests (like rspec)<br  /></li>
+<li>Familiar to those who are used to Rpec.<br  />
+</li>
+<li>FunSpec allows you to nest your tests (like rspec)<br  />
+</li>
 </ul>
 
 <div class="org-src-container">
 
-<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">FunSpec</span>
+<pre class="src src-scala">import org.scalatest.FunSpec
 
-<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">FunSpec</span> {
+class SetSpec extends FunSpec {
 
-  describe(<span style="color: #008000;">"A Set"</span>) {
-    describe(<span style="color: #008000;">"when empty"</span>) {
-      it(<span style="color: #008000;">"should have size 0"</span>) {
-        assert(<span style="color: #D0372D;">Set</span>.empty.size == <span style="color: #D0372D;">0</span>)
+  describe("A Set") {
+    describe("when empty") {
+      it("should have size 0") {
+        assert(Set.empty.size == 0)
       }
 
-      it(<span style="color: #008000;">"should produce NoSuchElementException when head is invoked"</span>) {
-        intercept[<span style="color: #D0372D;">NoSuchElementException</span>] {
-          <span style="color: #D0372D;">Set</span>.empty.head
+      it("should produce NoSuchElementException when head is invoked") {
+        intercept[NoSuchElementException] {
+          Set.empty.head
         }
       }
     }
@@ -412,28 +426,32 @@ A Set
 <b>Why is path.FunSpec is better than FunSpec?</b> See my <span class="underline">FunSpecSpec</span> for an example that<br  />
 demonstrates the difference<br  />
 </p>
-</div></li>
+</div>
+</li>
 
-<li><a id="orgheadline17"></a><b>FlatSpec</b><br  /><div class="outline-text-4" id="text-orgheadline17">
+<li><a id="sec-3-1-2" name="sec-3-1-2"></a><b>FlatSpec</b><br  /><div class="outline-text-4" id="text-3-1-2">
 <ul class="org-ul">
-<li>you can&rsquo;t next tests<br  /></li>
-<li>you use verbs like: must, should, can to make your tests more meaningful<br  /></li>
-<li>intuitive to use, but sometimes following the &ldquo;subject should X&rdquo; syntax is clumsy<br  /></li>
+<li>you can&rsquo;t next tests<br  />
+</li>
+<li>you use verbs like: must, should, can to make your tests more meaningful<br  />
+</li>
+<li>intuitive to use, but sometimes following the &ldquo;subject should X&rdquo; syntax is clumsy<br  />
+</li>
 </ul>
 
 <div class="org-src-container">
 
-<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">FlatSpec</span>
+<pre class="src src-scala">import org.scalatest.FlatSpec
 
-<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">FlatSpec</span> {
+class SetSpec extends FlatSpec {
 
-  <span style="color: #008000;">"An empty Set"</span> should <span style="color: #008000;">"have size 0"</span> in {
-    assert(<span style="color: #D0372D;">Set</span>.empty.size == <span style="color: #D0372D;">0</span>)
+  "An empty Set" should "have size 0" in {
+    assert(Set.empty.size == 0)
   }
 
-  it should <span style="color: #008000;">"produce NoSuchElementException when head is invoked"</span> in {
-    intercept[<span style="color: #D0372D;">NoSuchElementException</span>] {
-      <span style="color: #D0372D;">Set</span>.empty.head
+  it should "produce NoSuchElementException when head is invoked" in {
+    intercept[NoSuchElementException] {
+      Set.empty.head
     }
   }
 }
@@ -448,40 +466,43 @@ An empty Set
 - should have size 0
 - should produce NoSuchElementException when head is invoked
 </pre>
-</div></li>
+</div>
+</li>
 
-<li><a id="orgheadline18"></a><b>FreeSpec</b><br  /><div class="outline-text-4" id="text-orgheadline18">
+<li><a id="sec-3-1-3" name="sec-3-1-3"></a><b>FreeSpec</b><br  /><div class="outline-text-4" id="text-3-1-3">
 <ul class="org-ul">
 <li>Facilitates a BDD-style, in which tests are nested inside text clauses denoted with the<br  />
-dash operator (-).<br  /></li>
-<li>It enforces no structure, so you have maximum flexibility.<br  /></li>
+dash operator (-).<br  />
+</li>
+<li>It enforces no structure, so you have maximum flexibility.<br  />
+</li>
 </ul>
 
 <div class="org-src-container">
 
-<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">FreeSpec</span>
+<pre class="src src-scala">import org.scalatest.FreeSpec
 
-<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">StackSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">FreeSpec</span> {
-  <span style="color: #008000;">"A Stack"</span> - {
-    <span style="color: #008000;">"whenever it is empty"</span> - {
-      <span style="color: #008000;">"certainly ought to"</span> - {
-        <span style="color: #008000;">"be empty"</span> in {
-          <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">...</span>
+class StackSpec extends FreeSpec {
+  "A Stack" - {
+    "whenever it is empty" - {
+      "certainly ought to" - {
+        "be empty" in {
+          // ...
         }
-        <span style="color: #008000;">"complain on peek"</span> in {
-          <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">...</span>
+        "complain on peek" in {
+          // ...
         }
-        <span style="color: #008000;">"complain on pop"</span> in {
-          <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">...</span>
+        "complain on pop" in {
+          // ...
         }
       }
     }
-    <span style="color: #008000;">"but when full, by contrast, must"</span> - {
-      <span style="color: #008000;">"be full"</span> in {
-        <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">...</span>
+    "but when full, by contrast, must" - {
+      "be full" in {
+        // ...
       }
-      <span style="color: #008000;">"complain on push"</span> in {
-        <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">...</span>
+      "complain on push" in {
+        // ...
       }
     }
   }
@@ -504,31 +525,35 @@ A Stack
   - be full
   - complain on push
 </pre>
-</div></li>
+</div>
+</li>
 
-<li><a id="orgheadline19"></a><b>WordSpec</b><br  /><div class="outline-text-4" id="text-orgheadline19">
+<li><a id="sec-3-1-4" name="sec-3-1-4"></a><b>WordSpec</b><br  /><div class="outline-text-4" id="text-3-1-4">
 <ul class="org-ul">
-<li>Familiar to those who are used to specs or specs2<br  /></li>
+<li>Familiar to those who are used to specs or specs2<br  />
+</li>
 
-<li>Very prescriptive<br  /></li>
-<li>Quite a bit more wordy<br  /></li>
+<li>Very prescriptive<br  />
+</li>
+<li>Quite a bit more wordy<br  />
+</li>
 </ul>
 
 <div class="org-src-container">
 
-<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">WordSpec</span>
+<pre class="src src-scala">import org.scalatest.WordSpec
 
-<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">WordSpec</span> {
+class SetSpec extends WordSpec {
 
-  <span style="color: #008000;">"A Set"</span> when {
-    <span style="color: #008000;">"empty"</span> should {
-      <span style="color: #008000;">"have size 0"</span> in {
-        assert(<span style="color: #D0372D;">Set</span>.empty.size == <span style="color: #D0372D;">0</span>)
+  "A Set" when {
+    "empty" should {
+      "have size 0" in {
+        assert(Set.empty.size == 0)
       }
 
-      <span style="color: #008000;">"produce NoSuchElementException when head is invoked"</span> in {
-        intercept[<span style="color: #D0372D;">NoSuchElementException</span>] {
-          <span style="color: #D0372D;">Set</span>.empty.head
+      "produce NoSuchElementException when head is invoked" in {
+        intercept[NoSuchElementException] {
+          Set.empty.head
         }
       }
     }
@@ -545,34 +570,37 @@ A Set
   - should have size 0
   - should produce NoSuchElementException when head is invoked
 </pre>
-</div></li>
+</div>
+</li>
 
-<li><a id="orgheadline20"></a><b>Spec</b><br  /><div class="outline-text-4" id="text-orgheadline20">
+<li><a id="sec-3-1-5" name="sec-3-1-5"></a><b>Spec</b><br  /><div class="outline-text-4" id="text-3-1-5">
 <ul class="org-ul">
 <li>It allows you to define tests as methods, which saves one function literal per test<br  />
 which translates into faster compile times and fewer generated class files, which can<br  />
-help minimize build times.<br  /></li>
+help minimize build times.<br  />
+</li>
 
 <li>Using Spec can be a good choice in large projects where build times are a concern as<br  />
 well as when generating large numbers of tests programatically via static code<br  />
-generators.<br  /></li>
+generators.<br  />
+</li>
 </ul>
 
 <div class="org-src-container">
 
-<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">Spec</span>
+<pre class="src src-scala">import org.scalatest.Spec
 
-<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">Spec</span> {
+class SetSpec extends Spec {
 
-  <span style="color: #0000FF;">object</span> `<span style="color: #D0372D;">A</span> <span style="color: #D0372D;">Set</span>` {
-    <span style="color: #0000FF;">object</span> `when empty` {
-      <span style="color: #0000FF;">def</span> `should have size <span style="color: #D0372D;">0</span>` {
-        assert(<span style="color: #D0372D;">Set</span>.empty.size == <span style="color: #D0372D;">0</span>)
+  object `A Set` {
+    object `when empty` {
+      def `should have size 0` {
+        assert(Set.empty.size == 0)
       }
 
-      <span style="color: #0000FF;">def</span> `should produce <span style="color: #D0372D;">NoSuchElementException</span> when head is invoked` {
-        intercept[<span style="color: #D0372D;">NoSuchElementException</span>] {
-          <span style="color: #D0372D;">Set</span>.empty.head
+      def `should produce NoSuchElementException when head is invoked` {
+        intercept[NoSuchElementException] {
+          Set.empty.head
         }
       }
     }
@@ -587,26 +615,28 @@ A Set
   - should have size 0
   - should produce NoSuchElementException when head is invoked
 </pre>
-</div></li>
+</div>
+</li>
 
-<li><a id="orgheadline21"></a><b>FunSuite</b><br  /><div class="outline-text-4" id="text-orgheadline21">
+<li><a id="sec-3-1-6" name="sec-3-1-6"></a><b>FunSuite</b><br  /><div class="outline-text-4" id="text-3-1-6">
 <ul class="org-ul">
-<li>For those who like xUnit-style tests<br  /></li>
+<li>For those who like xUnit-style tests<br  />
+</li>
 </ul>
 
 <div class="org-src-container">
 
-<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">FunSuite</span>
+<pre class="src src-scala">import org.scalatest.FunSuite
 
-<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSuite</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">FunSuite</span> {
+class SetSuite extends FunSuite {
 
-  test(<span style="color: #008000;">"An empty Set should have size 0"</span>) {
-    assert(<span style="color: #D0372D;">Set</span>.empty.size == <span style="color: #D0372D;">0</span>)
+  test("An empty Set should have size 0") {
+    assert(Set.empty.size == 0)
   }
 
-  test(<span style="color: #008000;">"Invoking head on an empty Set should produce NoSuchElementException"</span>) {
-    intercept[<span style="color: #D0372D;">NoSuchElementException</span>] {
-      <span style="color: #D0372D;">Set</span>.empty.head
+  test("Invoking head on an empty Set should produce NoSuchElementException") {
+    intercept[NoSuchElementException] {
+      Set.empty.head
     }
   }
 }
@@ -620,34 +650,35 @@ Output:<br  />
 - An empty Set should have size 0
 - Invoking head on an empty Set should produce NoSuchElementException
 </pre>
-</div></li>
+</div>
+</li>
 
-<li><a id="orgheadline22"></a><b>PropSpec</b><br  /><div class="outline-text-4" id="text-orgheadline22">
+<li><a id="sec-3-1-7" name="sec-3-1-7"></a><b>PropSpec</b><br  /><div class="outline-text-4" id="text-3-1-7">
 <div class="org-src-container">
 
-<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #0000FF;">_</span>
-<span style="color: #0000FF;">import</span> prop.<span style="color: #0000FF;">_</span>
-<span style="color: #0000FF;">import</span> scala.collection.immutable.<span style="color: #0000FF;">_</span>
+<pre class="src src-scala">import org.scalatest._
+import prop._
+import scala.collection.immutable._
 
-<span style="color: #0000FF;">class</span> <span style="color: #6434A3;">SetSpec</span> <span style="color: #0000FF;">extends</span> <span style="color: #6434A3;">PropSpec</span> <span style="color: #0000FF;">with</span> <span style="color: #6434A3;">TableDrivenPropertyChecks</span> <span style="color: #0000FF;">with</span> <span style="color: #6434A3;">Matchers</span> {
+class SetSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
 
-  <span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">examples</span> <span style="color: #0000FF;">=</span>
-    <span style="color: #D0372D;">Table</span>(
-      <span style="color: #008000;">"set"</span>,
-      <span style="color: #D0372D;">BitSet</span>.empty,
-      <span style="color: #D0372D;">HashSet</span>.empty[<span style="color: #D0372D;">Int</span>],
-      <span style="color: #D0372D;">TreeSet</span>.empty[<span style="color: #D0372D;">Int</span>]
+  val examples =
+    Table(
+      "set",
+      BitSet.empty,
+      HashSet.empty[Int],
+      TreeSet.empty[Int]
     )
 
-  property(<span style="color: #008000;">"an empty Set should have size 0"</span>) {
-    forAll(examples) { set <span style="color: #0000FF;">=&gt;</span>
-      set.size should be (<span style="color: #D0372D;">0</span>)
+  property("an empty Set should have size 0") {
+    forAll(examples) { set =&gt;
+      set.size should be (0)
     }
   }
 
-  property(<span style="color: #008000;">"invoking head on an empty set should produce NoSuchElementException"</span>) {
-    forAll(examples) { set <span style="color: #0000FF;">=&gt;</span>
-       a [<span style="color: #D0372D;">NoSuchElementException</span>] should be thrownBy { set.head }
+  property("invoking head on an empty set should produce NoSuchElementException") {
+    forAll(examples) { set =&gt;
+       a [NoSuchElementException] should be thrownBy { set.head }
     }
   }
 }
@@ -661,150 +692,164 @@ Output:<br  />
 - an empty Set should have size 0
 - invoking head on an empty set should produce NoSuchElementException
 </pre>
-</div></li></ul>
+</div>
+</li></ul>
 </div>
 
 
-<div id="outline-container-orgheadline25" class="outline-3">
-<h3 id="orgheadline25">Asserts/Inspectors</h3>
-<div class="outline-text-3" id="text-orgheadline25">
-</div><ul class="org-ul"><li><a id="orgheadline23"></a><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors">Inspectors</a><br  /><div class="outline-text-4" id="text-orgheadline23">
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">Asserts/Inspectors</h3>
+<div class="outline-text-3" id="text-3-2">
+</div><ul class="org-ul"><li><a id="sec-3-2-1" name="sec-3-2-1"></a><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors">Inspectors</a><br  /><div class="outline-text-4" id="text-3-2-1">
 <ul class="org-ul">
 <li>Provides nestable inspector methods (or just inspectors) that enable assertions to be<br  />
-made about collections.<br  /></li>
+made about collections.<br  />
+</li>
 </ul>
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
 <colgroup>
-<col  class="org-left" />
+<col  class="left" />
 
-<col  class="org-left" />
+<col  class="left" />
 
-<col  class="org-left" />
+<col  class="left" />
 </colgroup>
 <tbody>
 <tr>
-<td class="org-left">forAll</td>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">succeeds if the assertion holds true for every element</td>
+<td class="left">forAll</td>
+<td class="left">&#xa0;</td>
+<td class="left">succeeds if the assertion holds true for every element</td>
 </tr>
 
 <tr>
-<td class="org-left">forAtLeast</td>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">succeeds if the assertion holds true for at least the specified number of elements</td>
+<td class="left">forAtLeast</td>
+<td class="left">&#xa0;</td>
+<td class="left">succeeds if the assertion holds true for at least the specified number of elements</td>
 </tr>
 
 <tr>
-<td class="org-left">forAtMost</td>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">succeeds if the assertion holds true for at most the specified number of elements</td>
+<td class="left">forAtMost</td>
+<td class="left">&#xa0;</td>
+<td class="left">succeeds if the assertion holds true for at most the specified number of elements</td>
 </tr>
 
 <tr>
-<td class="org-left">forBetween</td>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">succeeds if the assertion holds true for between the specified minimum and maximum</td>
+<td class="left">forBetween</td>
+<td class="left">&#xa0;</td>
+<td class="left">succeeds if the assertion holds true for between the specified minimum and maximum</td>
 </tr>
 
 <tr>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">number of elements,  inclusive</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">number of elements,  inclusive</td>
 </tr>
 
 <tr>
-<td class="org-left">forEvery</td>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">same as forAll, but lists all failing elements if it fails (forAll just reports the first)</td>
+<td class="left">forEvery</td>
+<td class="left">&#xa0;</td>
+<td class="left">same as forAll, but lists all failing elements if it fails (forAll just reports the first)</td>
 </tr>
 
 <tr>
-<td class="org-left">forExactly</td>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">succeeds if the assertion holds true for exactly the specified number of elements</td>
+<td class="left">forExactly</td>
+<td class="left">&#xa0;</td>
+<td class="left">succeeds if the assertion holds true for exactly the specified number of elements</td>
 </tr>
 </tbody>
 </table>
 
 <div class="org-src-container">
 
-<pre class="src src-scala">scala&gt; <span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #0000FF;">_</span>
-<span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #0000FF;">_</span>
-scala&gt; <span style="color: #0000FF;">import</span> <span style="color: #D0372D;">Assertions</span>.<span style="color: #0000FF;">_</span>
-<span style="color: #0000FF;">import</span> <span style="color: #D0372D;">Assertions</span>.<span style="color: #0000FF;">_</span>
+<pre class="src src-scala">scala&gt; import org.scalatest._
+import org.scalatest._
+scala&gt; import Assertions._
+import Assertions._
 
-scala&gt; <span style="color: #0000FF;">import</span> <span style="color: #D0372D;">Inspectors</span>.<span style="color: #0000FF;">_</span>
-<span style="color: #0000FF;">import</span> <span style="color: #D0372D;">Inspectors</span>.<span style="color: #0000FF;">_</span>
+scala&gt; import Inspectors._
+import Inspectors._
 
-scala&gt; <span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">xs</span> <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">List</span>(<span style="color: #D0372D;">1</span>, <span style="color: #D0372D;">2</span>, <span style="color: #D0372D;">3</span>, <span style="color: #D0372D;">4</span>, <span style="color: #D0372D;">5</span>)
-xs<span style="color: #0000FF;">:</span> <span style="color: #6434A3;">List</span>[<span style="color: #D0372D;">Int</span>] <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">List</span>(<span style="color: #D0372D;">1</span>, <span style="color: #D0372D;">2</span>, <span style="color: #D0372D;">3</span>, <span style="color: #D0372D;">4</span>, <span style="color: #D0372D;">5</span>)
+scala&gt; val xs = List(1, 2, 3, 4, 5)
+xs: List[Int] = List(1, 2, 3, 4, 5)
 </pre>
 </div>
-</div></li>
-<li><a id="orgheadline24"></a><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions">Assertions</a><br  /><div class="outline-text-4" id="text-orgheadline24">
+</div>
+</li>
+<li><a id="sec-3-2-2" name="sec-3-2-2"></a><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions">Assertions</a><br  /><div class="outline-text-4" id="text-3-2-2">
 <div class="org-src-container">
 
-<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">Assertions</span>.<span style="color: #0000FF;">_</span>
-<span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">left</span> <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">2</span>
-<span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">right</span> <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">1</span>
+<pre class="src src-scala">import org.scalatest.Assertions._
+val left = 2
+val right = 1
 assert(left == right)
 </pre>
 </div>
-</div></li></ul>
+</div>
+</li></ul>
 </div>
 
 
-<div id="outline-container-orgheadline42" class="outline-3">
-<h3 id="orgheadline42">ScalaTest in detail (with FunSpec)</h3>
-<div class="outline-text-3" id="text-orgheadline42">
-</div><ul class="org-ul"><li><a id="orgheadline41"></a>how to ignore tests<br  /><ul class="org-ul"><li><a id="orgheadline26"></a>Informers, Documenters<br  /></li>
-<li><a id="orgheadline27"></a>Notifiers, Alerters<br  /></li>
-<li><a id="orgheadline28"></a>Pending tests<br  /></li>
-<li><a id="orgheadline29"></a>Tagging tests<br  /></li>
-<li><a id="orgheadline30"></a>Shared fixtures<br  /></li>
-<li><a id="orgheadline31"></a>refactoring<br  /></li>
-<li><a id="orgheadline32"></a>get-fixture<br  /></li>
-<li><a id="orgheadline33"></a>fixture-context objects<br  /></li>
-<li><a id="orgheadline34"></a>withFixture(NoArgTest)<br  /></li>
-<li><a id="orgheadline35"></a>loan-fixture<br  /></li>
-<li><a id="orgheadline36"></a>withFixture(OneArgTest)<br  /></li>
-<li><a id="orgheadline37"></a>mixing in BeforeAndAfter<br  /></li>
-<li><a id="orgheadline38"></a>composing fixtures by stacking traits<br  /></li>
-<li><a id="orgheadline39"></a>Shared tests<br  /></li>
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3">ScalaTest in detail (with FunSpec)</h3>
+<div class="outline-text-3" id="text-3-3">
+</div><ul class="org-ul"><li><a id="sec-3-3-1" name="sec-3-3-1"></a>how to ignore tests<br  /><ul class="org-ul"><li><a id="sec-3-3-1-1" name="sec-3-3-1-1"></a>Informers, Documenters<br  /></li>
+<li><a id="sec-3-3-1-2" name="sec-3-3-1-2"></a>Notifiers, Alerters<br  /></li>
+<li><a id="sec-3-3-1-3" name="sec-3-3-1-3"></a>Pending tests<br  /></li>
+<li><a id="sec-3-3-1-4" name="sec-3-3-1-4"></a>Tagging tests<br  /></li>
+<li><a id="sec-3-3-1-5" name="sec-3-3-1-5"></a>Shared fixtures<br  /></li>
+<li><a id="sec-3-3-1-6" name="sec-3-3-1-6"></a>refactoring<br  /></li>
+<li><a id="sec-3-3-1-7" name="sec-3-3-1-7"></a>get-fixture<br  /></li>
+<li><a id="sec-3-3-1-8" name="sec-3-3-1-8"></a>fixture-context objects<br  /></li>
+<li><a id="sec-3-3-1-9" name="sec-3-3-1-9"></a>withFixture(NoArgTest)<br  /></li>
+<li><a id="sec-3-3-1-10" name="sec-3-3-1-10"></a>loan-fixture<br  /></li>
+<li><a id="sec-3-3-1-11" name="sec-3-3-1-11"></a>withFixture(OneArgTest)<br  /></li>
+<li><a id="sec-3-3-1-12" name="sec-3-3-1-12"></a>mixing in BeforeAndAfter<br  /></li>
+<li><a id="sec-3-3-1-13" name="sec-3-3-1-13"></a>composing fixtures by stacking traits<br  /></li>
+<li><a id="sec-3-3-1-14" name="sec-3-3-1-14"></a>Shared tests<br  /></li>
 
-<li><a id="orgheadline40"></a>two styles of asserts (demonstrate)<br  /></li></ul></li></ul>
+<li><a id="sec-3-3-1-15" name="sec-3-3-1-15"></a>two styles of asserts (demonstrate)<br  /></li></ul>
+</li></ul>
 </div>
 
 
-<div id="outline-container-orgheadline45" class="outline-3">
-<h3 id="orgheadline45">Notes on Libraries</h3>
-<div class="outline-text-3" id="text-orgheadline45">
-</div><ul class="org-ul"><li><a id="orgheadline43"></a>New in ScalaTest 3.0<br  /><div class="outline-text-4" id="text-orgheadline43">
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4">Notes on Libraries</h3>
+<div class="outline-text-3" id="text-3-4">
+</div><ul class="org-ul"><li><a id="sec-3-4-1" name="sec-3-4-1"></a>New in ScalaTest 3.0<br  /><div class="outline-text-4" id="text-3-4-1">
 <ul class="org-ul">
-<li>now fully support Scala.js<br  /></li>
+<li>now fully support Scala.js<br  />
+</li>
 <li><b>AsyncFunSuite</b>, <b>AsyncFunSpec</b>, <b>AsyncFlatSpec</b>, <b>AsyncFreeSpec</b>, <b>AsyncWordspec</b>, and<br  />
-<b>AsyncFeatureSpec</b> (the result type of tests is Future[Assertion])<br  /></li>
+<b>AsyncFeatureSpec</b> (the result type of tests is Future[Assertion])<br  />
+</li>
 <li><b>oneElementOf</b>, <b>noElementsOf</b>, <b>atLeastOneElementOf</b>, <b>atMostOneElementOf</b>,<br  />
-<b>allElementsOf</b>, <b>inOrderElementsOf</b><br  /></li>
-<li>Added overloaded <b>exists</b> and <b>forEvery</b> methods to TableDrivenPropertyChecks.<br  /></li>
+<b>allElementsOf</b>, <b>inOrderElementsOf</b><br  />
+</li>
+<li>Added overloaded <b>exists</b> and <b>forEvery</b> methods to TableDrivenPropertyChecks.<br  />
+</li>
 </ul>
-</div></li>
-<li><a id="orgheadline44"></a>Scalactic<br  /><div class="outline-text-4" id="text-orgheadline44">
+</div>
+</li>
+<li><a id="sec-3-4-2" name="sec-3-4-2"></a>Scalactic<br  /><div class="outline-text-4" id="text-3-4-2">
 <ul class="org-ul">
-<li>In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with &ldquo;galactic&rdquo;).<br  /></li>
-<li>in 3.0 support Scala.JS<br  /></li>
+<li>In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with &ldquo;galactic&rdquo;).<br  />
+</li>
+<li>in 3.0 support Scala.JS<br  />
+</li>
 </ul>
-</div></li></ul>
+</div>
+</li></ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="date">Date: July 11, 2016</p>
 <p class="author">Author: Ovi Sofariu</p>
-<p class="date">Created: 2016-07-05 Tue 08:14</p>
+<p class="date">Created: 2016-07-05 Tue 12:34</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -28,9 +28,12 @@ addSbtPlugin("com.artima.supersafe" % "sbtplugin" % "1.1.0-RC7")
 #+end_example
 
 *** outside of the project, add resolver:
+- If you want to import the project from GitHub into Intellij, *you need to do this step first*,
+  so it can find the plugin when setting up the project.
+
 #+begin_src sh
 $ cd ~/.sbt/0.13
-$ cat "resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/releases\"" >> global.sbt
+$ echo "resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/releases\"" >> global.sbt
 #+end_src
 
 
@@ -67,7 +70,6 @@ $ cat "resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/rele
 |                | Needed if you change the build definition.                                                    |
 | help <command> | Displays detailed help for the specified command.                                             |
 |                | If no command is provided, displays brief descriptions of all commands.                       |
-|                |                                                                                               |
 
 ** SBT Tasks (from within sbt)
 *** *test*
