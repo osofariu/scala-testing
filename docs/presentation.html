@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-07-04 Mon 20:56 -->
+<!-- 2016-07-05 Tue 08:14 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="viewport" content="width=device-width, initial-scale=1" />
 <title>Testing in Scala</title>
@@ -669,6 +669,11 @@ Output:<br  />
 <h3 id="orgheadline25">Asserts/Inspectors</h3>
 <div class="outline-text-3" id="text-orgheadline25">
 </div><ul class="org-ul"><li><a id="orgheadline23"></a><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors">Inspectors</a><br  /><div class="outline-text-4" id="text-orgheadline23">
+<ul class="org-ul">
+<li>Provides nestable inspector methods (or just inspectors) that enable assertions to be<br  />
+made about collections.<br  /></li>
+</ul>
+
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -723,8 +728,22 @@ Output:<br  />
 </tr>
 </tbody>
 </table>
-</div></li>
 
+<div class="org-src-container">
+
+<pre class="src src-scala">scala&gt; <span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #0000FF;">_</span>
+<span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #0000FF;">_</span>
+scala&gt; <span style="color: #0000FF;">import</span> <span style="color: #D0372D;">Assertions</span>.<span style="color: #0000FF;">_</span>
+<span style="color: #0000FF;">import</span> <span style="color: #D0372D;">Assertions</span>.<span style="color: #0000FF;">_</span>
+
+scala&gt; <span style="color: #0000FF;">import</span> <span style="color: #D0372D;">Inspectors</span>.<span style="color: #0000FF;">_</span>
+<span style="color: #0000FF;">import</span> <span style="color: #D0372D;">Inspectors</span>.<span style="color: #0000FF;">_</span>
+
+scala&gt; <span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">xs</span> <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">List</span>(<span style="color: #D0372D;">1</span>, <span style="color: #D0372D;">2</span>, <span style="color: #D0372D;">3</span>, <span style="color: #D0372D;">4</span>, <span style="color: #D0372D;">5</span>)
+xs<span style="color: #0000FF;">:</span> <span style="color: #6434A3;">List</span>[<span style="color: #D0372D;">Int</span>] <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">List</span>(<span style="color: #D0372D;">1</span>, <span style="color: #D0372D;">2</span>, <span style="color: #D0372D;">3</span>, <span style="color: #D0372D;">4</span>, <span style="color: #D0372D;">5</span>)
+</pre>
+</div>
+</div></li>
 <li><a id="orgheadline24"></a><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions">Assertions</a><br  /><div class="outline-text-4" id="text-orgheadline24">
 <div class="org-src-container">
 
@@ -785,7 +804,7 @@ assert(left == right)
 <div id="postamble" class="status">
 <p class="date">Date: July 11, 2016</p>
 <p class="author">Author: Ovi Sofariu</p>
-<p class="date">Created: 2016-07-04 Mon 20:56</p>
+<p class="date">Created: 2016-07-05 Tue 08:14</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

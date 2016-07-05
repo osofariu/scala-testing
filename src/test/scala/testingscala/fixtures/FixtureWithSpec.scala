@@ -9,6 +9,9 @@ class FixtureWithSpec extends FunSpec {
   //The withFixture(NoArgTest) method exists so that you can override it
   // and set a fixture up before, and clean it up after, each test.
 
+  // Also using this test to demonstrate the four different ways to pass information back
+  //
+
   private var reader: FileReader = _
   val textInFile = "Hello, test!"
 
