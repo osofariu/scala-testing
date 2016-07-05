@@ -80,7 +80,7 @@ $ echo "resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/rel
 - before version 0.13 this task was "test-only". As of 0.13 they both work.
 
 #+begin_example
-testOnly testingscala.tags.FixtureWithSpec  testingscala.tags.TagTest
+testOnly testingscala.tags.FixtureWithSpec  testingscala.certaintests.TagSpec
 #+end_example
 
 - *use wildcards* to run only certain tests by name:
@@ -91,10 +91,10 @@ testOnly *FixtureWithSpec
 - **use tags** to only run certain tests by tag:
 
 #+begin_example
-testOnly *TagTest -- -n FastTest  // only run tests tagged as "FastTest"
-testOnly *TagTest -- -n SlowTest -n FastTest // run both "SlowTest" and "FastTest" tags
-testOnly *TagTest -- -l SlowTest  // exclude tests tagged as "SlowTest"
-testOnly *TagTest -- -l SlowTest  // exclude these tags
+testOnly *TagSpec -- -n FastTest  // only run tests tagged as "FastTest"
+testOnly *TagSpec -- -n SlowTest -n FastTest // run both "SlowTest" and "FastTest" tags
+testOnly *TagSpec -- -l SlowTest  // exclude tests tagged as "SlowTest"
+testOnly *TagSpec -- -l SlowTest  // exclude these tags
 #+end_example
 
 *** *testQuick* - like testOnly, but also takes into account additional filters:
@@ -268,7 +268,7 @@ A Stack
   help minimize build times.
 
 - Using Spec can be a good choice in large projects where build times are a concern as
-  well as when generating large numbers of tests programatically via static code
+  well as when generating large numbers of tests programmatically via static code
   generators.
 
 #+begin_src scala
@@ -364,7 +364,6 @@ Output:
  - invoking head on an empty set should produce NoSuchElementException
 #+end_example
 
-
 ** Asserts/Inspectors
 *** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors][Inspectors]]
 
@@ -401,14 +400,22 @@ xs: List[Int] = List(1, 2, 3, 4, 5)
   assert(left == right)
 #+end_src
 
-
 ** ScalaTest in detail (with FunSpec)
 *** how to ignore tests
-**** Informers, Documenters
-**** Notifiers, Alerters
+**** Informers, Documenters, Notifiers, Alerters
+- See: testingscala.report.ReportOnSpec 
+
 **** Pending tests
+- See: testingscala.certaintests.OmitSpec
+  
 **** Tagging tests
+- See: testingscala.certaintests.TagSpec
+  
 **** Shared fixtures
+
+- see if I can get this to work, to show the source:
+#+!include ~/prog/projects/scala-testing/src/test/testingscala/fixtures/ExamplesWithFixture.scala
+
 **** refactoring
 **** get-fixture
 **** fixture-context objects

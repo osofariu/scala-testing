@@ -1,9 +1,9 @@
-package testingscala.tags
+package testingscala.certaintests
 
 import org.scalatest.Tag
 import testingscala.BaseSpec
 
-class TagTest extends BaseSpec {
+class TagSpec extends BaseSpec {
 
   describe("built-in tags") {
     ignore("will ignore this because I replaced 'it' with 'ignore'") {
