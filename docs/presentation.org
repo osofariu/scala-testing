@@ -366,6 +366,9 @@ Output:
 ** Asserts/Inspectors
 *** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors][Inspectors]]
 
+- Provides nestable inspector methods (or just inspectors) that enable assertions to be
+  made about collections.
+
 | forAll     |   | succeeds if the assertion holds true for every element                                     |
 | forAtLeast |   | succeeds if the assertion holds true for at least the specified number of elements         |
 | forAtMost  |   | succeeds if the assertion holds true for at most the specified number of elements          |
@@ -374,6 +377,19 @@ Output:
 | forEvery   |   | same as forAll, but lists all failing elements if it fails (forAll just reports the first) |
 | forExactly |   | succeeds if the assertion holds true for exactly the specified number of elements          |
 
+#+begin_src scala
+scala> import org.scalatest._
+import org.scalatest._
+scala> import Assertions._
+import Assertions._
+
+scala> import Inspectors._
+import Inspectors._
+
+scala> val xs = List(1, 2, 3, 4, 5)
+xs: List[Int] = List(1, 2, 3, 4, 5)
+
+#+end_src
 *** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions][Assertions]]
 
 #+begin_src scala
