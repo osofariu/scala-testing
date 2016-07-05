@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-07-04 Mon 18:55 -->
+<!-- 2016-07-04 Mon 20:56 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="viewport" content="width=device-width, initial-scale=1" />
 <title>Testing in Scala</title>
@@ -358,9 +358,9 @@ recompiled.<br  /></li>
 </div>
 
 
-<div id="outline-container-orgheadline30" class="outline-2">
-<h2 id="orgheadline30">ScalaTest</h2>
-<div class="outline-text-2" id="text-orgheadline30">
+<div id="outline-container-orgheadline46" class="outline-2">
+<h2 id="orgheadline46">ScalaTest</h2>
+<div class="outline-text-2" id="text-orgheadline46">
 </div><div id="outline-container-orgheadline15" class="outline-3">
 <h3 id="orgheadline15">Testing Styles</h3>
 <div class="outline-text-3" id="text-orgheadline15">
@@ -397,6 +397,16 @@ recompiled.<br  /></li>
 }
 </pre>
 </div>
+
+<p>
+Output:<br  />
+</p>
+<pre class="example">
+A Set
+  when empty
+  - should have size 0
+  - should produce NoSuchElementException when head is invoked
+</pre>
 
 <p>
 <b>Why is path.FunSpec is better than FunSpec?</b> See my <span class="underline">FunSpecSpec</span> for an example that<br  />
@@ -444,7 +454,7 @@ An empty Set
 <ul class="org-ul">
 <li>Facilitates a BDD-style, in which tests are nested inside text clauses denoted with the<br  />
 dash operator (-).<br  /></li>
-<li>It enforces no structure, so you have maximum flexibility<br  /></li>
+<li>It enforces no structure, so you have maximum flexibility.<br  /></li>
 </ul>
 
 <div class="org-src-container">
@@ -499,6 +509,7 @@ A Stack
 <li><a id="orgheadline19"></a><b>WordSpec</b><br  /><div class="outline-text-4" id="text-orgheadline19">
 <ul class="org-ul">
 <li>Familiar to those who are used to specs or specs2<br  /></li>
+
 <li>Very prescriptive<br  /></li>
 <li>Quite a bit more wordy<br  /></li>
 </ul>
@@ -537,6 +548,16 @@ A Set
 </div></li>
 
 <li><a id="orgheadline20"></a><b>Spec</b><br  /><div class="outline-text-4" id="text-orgheadline20">
+<ul class="org-ul">
+<li>It allows you to define tests as methods, which saves one function literal per test<br  />
+which translates into faster compile times and fewer generated class files, which can<br  />
+help minimize build times.<br  /></li>
+
+<li>Using Spec can be a good choice in large projects where build times are a concern as<br  />
+well as when generating large numbers of tests programatically via static code<br  />
+generators.<br  /></li>
+</ul>
+
 <div class="org-src-container">
 
 <pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">Spec</span>
@@ -559,6 +580,13 @@ A Set
 }
 </pre>
 </div>
+
+<pre class="example">
+A Set
+  when empty
+  - should have size 0
+  - should produce NoSuchElementException when head is invoked
+</pre>
 </div></li>
 
 <li><a id="orgheadline21"></a><b>FunSuite</b><br  /><div class="outline-text-4" id="text-orgheadline21">
@@ -584,6 +612,14 @@ A Set
 }
 </pre>
 </div>
+
+<p>
+Output:<br  />
+</p>
+<pre class="example">
+- An empty Set should have size 0
+- Invoking head on an empty Set should produce NoSuchElementException
+</pre>
 </div></li>
 
 <li><a id="orgheadline22"></a><b>PropSpec</b><br  /><div class="outline-text-4" id="text-orgheadline22">
@@ -617,16 +653,22 @@ A Set
 }
 </pre>
 </div>
+
+<p>
+Output:<br  />
+</p>
+<pre class="example">
+- an empty Set should have size 0
+- invoking head on an empty set should produce NoSuchElementException
+</pre>
 </div></li></ul>
 </div>
 
 
-<div id="outline-container-orgheadline23" class="outline-3">
-<h3 id="orgheadline23">Asserts/Inspectors</h3>
-</div>
-<div id="outline-container-orgheadline24" class="outline-3">
-<h3 id="orgheadline24"><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors">Inspectors</a></h3>
-<div class="outline-text-3" id="text-orgheadline24">
+<div id="outline-container-orgheadline25" class="outline-3">
+<h3 id="orgheadline25">Asserts/Inspectors</h3>
+<div class="outline-text-3" id="text-orgheadline25">
+</div><ul class="org-ul"><li><a id="orgheadline23"></a><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors">Inspectors</a><br  /><div class="outline-text-4" id="text-orgheadline23">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -681,13 +723,9 @@ A Set
 </tr>
 </tbody>
 </table>
-</div>
-</div>
+</div></li>
 
-
-<div id="outline-container-orgheadline25" class="outline-3">
-<h3 id="orgheadline25"><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions">Assertions</a></h3>
-<div class="outline-text-3" id="text-orgheadline25">
+<li><a id="orgheadline24"></a><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions">Assertions</a><br  /><div class="outline-text-4" id="text-orgheadline24">
 <div class="org-src-container">
 
 <pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">Assertions</span>.<span style="color: #0000FF;">_</span>
@@ -696,31 +734,49 @@ A Set
 assert(left == right)
 </pre>
 </div>
-</div>
+</div></li></ul>
 </div>
 
-<div id="outline-container-orgheadline26" class="outline-3">
-<h3 id="orgheadline26">ScalaTest (from other preso)</h3>
-<div class="outline-text-3" id="text-orgheadline26">
-<ul class="org-ul">
-<li>interfaces with Junit and TestNG (demonstrate)<br  /></li>
-<li>two styles of asserts (demonstrate)<br  /></li>
-</ul>
+
+<div id="outline-container-orgheadline42" class="outline-3">
+<h3 id="orgheadline42">ScalaTest in detail (with FunSpec)</h3>
+<div class="outline-text-3" id="text-orgheadline42">
+</div><ul class="org-ul"><li><a id="orgheadline41"></a>how to ignore tests<br  /><ul class="org-ul"><li><a id="orgheadline26"></a>Informers, Documenters<br  /></li>
+<li><a id="orgheadline27"></a>Notifiers, Alerters<br  /></li>
+<li><a id="orgheadline28"></a>Pending tests<br  /></li>
+<li><a id="orgheadline29"></a>Tagging tests<br  /></li>
+<li><a id="orgheadline30"></a>Shared fixtures<br  /></li>
+<li><a id="orgheadline31"></a>refactoring<br  /></li>
+<li><a id="orgheadline32"></a>get-fixture<br  /></li>
+<li><a id="orgheadline33"></a>fixture-context objects<br  /></li>
+<li><a id="orgheadline34"></a>withFixture(NoArgTest)<br  /></li>
+<li><a id="orgheadline35"></a>loan-fixture<br  /></li>
+<li><a id="orgheadline36"></a>withFixture(OneArgTest)<br  /></li>
+<li><a id="orgheadline37"></a>mixing in BeforeAndAfter<br  /></li>
+<li><a id="orgheadline38"></a>composing fixtures by stacking traits<br  /></li>
+<li><a id="orgheadline39"></a>Shared tests<br  /></li>
+
+<li><a id="orgheadline40"></a>two styles of asserts (demonstrate)<br  /></li></ul></li></ul>
 </div>
-<ul class="org-ul"><li><a id="orgheadline27"></a>sharing<br  /></li>
-<li><a id="orgheadline28"></a>Scalactic<br  /><div class="outline-text-4" id="text-orgheadline28">
+
+
+<div id="outline-container-orgheadline45" class="outline-3">
+<h3 id="orgheadline45">Notes on Libraries</h3>
+<div class="outline-text-3" id="text-orgheadline45">
+</div><ul class="org-ul"><li><a id="orgheadline43"></a>New in ScalaTest 3.0<br  /><div class="outline-text-4" id="text-orgheadline43">
+<ul class="org-ul">
+<li>now fully support Scala.js<br  /></li>
+<li><b>AsyncFunSuite</b>, <b>AsyncFunSpec</b>, <b>AsyncFlatSpec</b>, <b>AsyncFreeSpec</b>, <b>AsyncWordspec</b>, and<br  />
+<b>AsyncFeatureSpec</b> (the result type of tests is Future[Assertion])<br  /></li>
+<li><b>oneElementOf</b>, <b>noElementsOf</b>, <b>atLeastOneElementOf</b>, <b>atMostOneElementOf</b>,<br  />
+<b>allElementsOf</b>, <b>inOrderElementsOf</b><br  /></li>
+<li>Added overloaded <b>exists</b> and <b>forEvery</b> methods to TableDrivenPropertyChecks.<br  /></li>
+</ul>
+</div></li>
+<li><a id="orgheadline44"></a>Scalactic<br  /><div class="outline-text-4" id="text-orgheadline44">
 <ul class="org-ul">
 <li>In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with &ldquo;galactic&rdquo;).<br  /></li>
 <li>in 3.0 support Scala.JS<br  /></li>
-</ul>
-</div></li>
-<li><a id="orgheadline29"></a>New in ScalaTest 3.0<br  /><div class="outline-text-4" id="text-orgheadline29">
-<ul class="org-ul">
-<li>now fully support Scala.js<br  /></li>
-<li>AsyncFunSuite, AsyncFunSpec, AsyncFlatSpec, AsyncFreeSpec, AsyncWordspec, and AsyncFeatureSpec<br  />
-(the result type of tests is Future[Assertion])<br  /></li>
-<li>oneElementOf, noElementsOf, atLeastOneElementOf, atMostOneElementOf, allElementsOf, inOrderElementsOf<br  /></li>
-<li>Added overloaded exists and forEvery methods to TableDrivenPropertyChecks.<br  /></li>
 </ul>
 </div></li></ul>
 </div>
@@ -729,7 +785,7 @@ assert(left == right)
 <div id="postamble" class="status">
 <p class="date">Date: July 11, 2016</p>
 <p class="author">Author: Ovi Sofariu</p>
-<p class="date">Created: 2016-07-04 Mon 18:55</p>
+<p class="date">Created: 2016-07-04 Mon 20:56</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

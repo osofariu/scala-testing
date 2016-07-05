@@ -132,6 +132,14 @@ testOnly *TagTest -- -l SlowTest  // exclude these tags
   }
 #+end_src
 
+Output:
+#+begin_example
+ A Set
+   when empty
+   - should have size 0
+   - should produce NoSuchElementException when head is invoked
+#+end_example
+
 *Why is path.FunSpec is better than FunSpec?* See my _FunSpecSpec_ for an example that
 demonstrates the difference
 
@@ -167,7 +175,7 @@ An empty Set
 *** *FreeSpec*
 - Facilitates a BDD-style, in which tests are nested inside text clauses denoted with the
   dash operator (-).
-- It enforces no structure, so you have maximum flexibility
+- It enforces no structure, so you have maximum flexibility.
 
 #+begin_src scala
 import org.scalatest.FreeSpec
@@ -216,6 +224,7 @@ A Stack
 
 *** *WordSpec*
 - Familiar to those who are used to specs or specs2
+
 - Very prescriptive
 - Quite a bit more wordy
 
@@ -252,6 +261,14 @@ A Stack
 
 *** *Spec*
 
+- It allows you to define tests as methods, which saves one function literal per test
+  which translates into faster compile times and fewer generated class files, which can
+  help minimize build times.
+
+- Using Spec can be a good choice in large projects where build times are a concern as
+  well as when generating large numbers of tests programatically via static code
+  generators.
+
 #+begin_src scala
 import org.scalatest.Spec
 
@@ -273,6 +290,13 @@ class SetSpec extends Spec {
 }
 #+end_src
 
+#+begin_example
+ A Set
+   when empty
+   - should have size 0
+   - should produce NoSuchElementException when head is invoked
+#+end_example
+
 *** *FunSuite*
 - For those who like xUnit-style tests
 
@@ -293,41 +317,54 @@ class SetSpec extends Spec {
   }
 #+end_src
 
+Output:
+#+begin_example
+ - An empty Set should have size 0
+ - Invoking head on an empty Set should produce NoSuchElementException
+#+end_example
+
 *** *PropSpec*
 
 #+begin_src scala
 
-import org.scalatest._
-import prop._
-import scala.collection.immutable._
+  import org.scalatest._
+  import prop._
+  import scala.collection.immutable._
 
-class SetSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
+  class SetSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
 
-  val examples =
-    Table(
-      "set",
-      BitSet.empty,
-      HashSet.empty[Int],
-      TreeSet.empty[Int]
-    )
+    val examples =
+      Table(
+        "set",
+        BitSet.empty,
+        HashSet.empty[Int],
+        TreeSet.empty[Int]
+      )
 
-  property("an empty Set should have size 0") {
-    forAll(examples) { set =>
-      set.size should be (0)
+    property("an empty Set should have size 0") {
+      forAll(examples) { set =>
+        set.size should be (0)
+      }
+    }
+
+    property("invoking head on an empty set should produce NoSuchElementException") {
+      forAll(examples) { set =>
+         a [NoSuchElementException] should be thrownBy { set.head }
+      }
     }
   }
 
-  property("invoking head on an empty set should produce NoSuchElementException") {
-    forAll(examples) { set =>
-       a [NoSuchElementException] should be thrownBy { set.head }
-    }
-  }
-}
 #+end_src
+
+Output:
+#+begin_example
+ - an empty Set should have size 0
+ - invoking head on an empty set should produce NoSuchElementException
+#+end_example
 
 
 ** Asserts/Inspectors
-** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors][Inspectors]]
+*** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors][Inspectors]]
 
 | forAll     |   | succeeds if the assertion holds true for every element                                     |
 | forAtLeast |   | succeeds if the assertion holds true for at least the specified number of elements         |
@@ -337,8 +374,7 @@ class SetSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
 | forEvery   |   | same as forAll, but lists all failing elements if it fails (forAll just reports the first) |
 | forExactly |   | succeeds if the assertion holds true for exactly the specified number of elements          |
 
-
-** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions][Assertions]]
+*** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions][Assertions]]
 
 #+begin_src scala
   import org.scalatest.Assertions._
@@ -347,17 +383,36 @@ class SetSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
   assert(left == right)
 #+end_src
 
-** ScalaTest (from other preso)
 
-- interfaces with Junit and TestNG (demonstrate)
-- two styles of asserts (demonstrate)
-*** sharing
+** ScalaTest in detail (with FunSpec)
+*** how to ignore tests
+**** Informers, Documenters
+**** Notifiers, Alerters
+**** Pending tests
+**** Tagging tests
+**** Shared fixtures
+**** refactoring
+**** get-fixture
+**** fixture-context objects
+**** withFixture(NoArgTest)
+**** loan-fixture
+**** withFixture(OneArgTest)
+**** mixing in BeforeAndAfter
+**** composing fixtures by stacking traits
+**** Shared tests
+
+**** two styles of asserts (demonstrate)
+
+
+** Notes on Libraries
+
+*** New in ScalaTest 3.0
+- now fully support Scala.js
+- *AsyncFunSuite*, *AsyncFunSpec*, *AsyncFlatSpec*, *AsyncFreeSpec*, *AsyncWordspec*, and
+  *AsyncFeatureSpec* (the result type of tests is Future[Assertion])
+- *oneElementOf*, *noElementsOf*, *atLeastOneElementOf*, *atMostOneElementOf*,
+  *allElementsOf*, *inOrderElementsOf*
+- Added overloaded *exists* and *forEvery* methods to TableDrivenPropertyChecks.
 *** Scalactic
 - In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with "galactic").
 - in 3.0 support Scala.JS
-*** New in ScalaTest 3.0
-- now fully support Scala.js
-- AsyncFunSuite, AsyncFunSpec, AsyncFlatSpec, AsyncFreeSpec, AsyncWordspec, and AsyncFeatureSpec
-  (the result type of tests is Future[Assertion])
-- oneElementOf, noElementsOf, atLeastOneElementOf, atMostOneElementOf, allElementsOf, inOrderElementsOf
-- Added overloaded exists and forEvery methods to TableDrivenPropertyChecks.
