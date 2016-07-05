@@ -110,8 +110,8 @@ testOnly *TagTest -- -l SlowTest  // exclude these tags
 [[http://www.scalatest.org/user_guide/selecting_a_style]]
 
 *** *FunSpec*
-- Familiar to those who are used to Rpec.
-- FunSpec allows you to nest your tests (like rspec)
+- Familiar to those who are used to rSpec.
+- FunSpec allows you to nest your tests (like rSpec)
 
 #+begin_src scala
   import org.scalatest.FunSpec
