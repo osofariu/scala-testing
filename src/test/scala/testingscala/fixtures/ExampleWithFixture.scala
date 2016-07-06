@@ -1,49 +1,40 @@
 package testingscala.fixtures
 
-import org.scalatest.FlatSpec
-import org.scalatest.exceptions.TestFailedException
+import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 
-class ExampleWithFixture extends FlatSpec {
+class ExampleWithFixture extends FlatSpec with Matchers with BeforeAndAfter {
 
-  import java.io.File
-  import org.scalatest._
+  trait TraitFixture {
+    val intValue = 20
+    val strValue = "twenty"
+  }
 
-  override def withFixture(test: NoArgTest) = {
+  def objectFixture = new {
+    val intValue = 30
+    val strValue = "boo"
+  }
 
-    super.withFixture(test) match {
-      case failed: Failed =>
-        val currDir = new File(".")
-        val fileNames = currDir.list()
-        info("Dir snapshot: " + fileNames.mkString(", "))
-        failed
-      case other => other
+  before {
+    info("before test")
+  }
+
+  "Using trait-based fixture" should "give us a way to re-use fixture code" in {
+    new TraitFixture {
+      intValue shouldEqual 20
+      strValue shouldBe "twenty"
     }
   }
 
-  "This test" should "succeed" in {
-    assert(1 + 1 === 2)
+  "Using anonymous object fixtures" should "give us another" in {
+    objectFixture.intValue shouldEqual 30
+    assert(objectFixture.strValue === "boo")
   }
 
-  it should "fail" in {
-    val thrown = intercept[TestFailedException] {
-      assert(1 + 1 === 3)
-    }
-    assert (thrown.message contains "2 did not equal 3")
+  after {
+    info("after test")
   }
-
-/*
-additional OUTPUT:
-
-2 did not equal 3
-ScalaTestFailureLocation: testingscala.fixtures.ExampleWithFixture$$anonfun$2 at (ExampleWithFixture.scala:27)
-org.scalatest.exceptions.TestFailedException: 2 did not equal 3
-	at org.scalatest.Assertions$class.newAssertionFailedException(Assertions.scala:528)
-	at org.scalatest.FlatSpec.newAssertionFailedException(FlatSpec.scala:1685)
-	at org.scalatest.Assertions$AssertionsHelper.macroAssert(Assertions.scala:501)
-	at testingscala.fixtures.ExampleWithFixture$$anonfun$2.apply(ExampleWithFixture.scala:27)
-	at testingscala.fixtures.ExampleWithFixture$$anonfun$2.apply(ExampleWithFixture.scala:27)
-	at org.scalatest.OutcomeOf$class.outcomeOf(OutcomeOf.scala:85)
-	at org.scalatest.OutcomeOf$.outcomeOf(OutcomeOf.scala:104)
-*/
-
 }
+
+
+
+// talk a little about Scalactic if I haven't already.

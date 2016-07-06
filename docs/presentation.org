@@ -142,11 +142,11 @@ Output:
    - should produce NoSuchElementException when head is invoked
 #+end_example
 
-*Why is path.FunSpec is better than FunSpec?* See my _FunSpecSpec_ for an example that
+*Why is path.FunSpec is better than FunSpec?* See my _WithFunSpec_ for an example that
 demonstrates the difference
 
 *** *FlatSpec*
-- you can't next tests
+- you can't nest tests
 - you use verbs like: must, should, can to make your tests more meaningful
 - intuitive to use, but sometimes following the "subject should X" syntax is clumsy
 
@@ -178,6 +178,8 @@ An empty Set
 - Facilitates a BDD-style, in which tests are nested inside text clauses denoted with the
   dash operator (-).
 - It enforces no structure, so you have maximum flexibility.
+- It has a version of path.FreeSpec just like FunSpec (extending OneInstancePerTest) 
+- Lack of structure makes it attractive to non-English speakers
 
 #+begin_src scala
 import org.scalatest.FreeSpec
@@ -364,6 +366,79 @@ Output:
  - invoking head on an empty set should produce NoSuchElementException
 #+end_example
 
+*** *FeatureSpec*
+
+- Each test represents one *scenario* of a *feature*
+- With GivenWhenThen it looks like Gerkin syntax
+
+#+begin_src
+package org.scalatest.examples.featurespec
+
+import org.scalatest._
+
+class TVSet {
+  private var on: Boolean = false
+  def isOn: Boolean = on
+  def pressPowerButton() {
+    on = !on
+  }
+}
+
+class TVSetSpec extends FeatureSpec with GivenWhenThen {
+
+  info("As a TV set owner")
+  info("I want to be able to turn the TV on and off")
+  info("So I can watch TV when I want")
+  info("And save energy when I'm not watching TV")
+
+  feature("TV power button") {
+    scenario("User presses power button when TV is off") {
+
+      Given("a TV set that is switched off")
+      val tv = new TVSet
+      assert(!tv.isOn)
+
+      When("the power button is pressed")
+      tv.pressPowerButton()
+
+      Then("the TV should switch on")
+      assert(tv.isOn)
+    }
+
+    scenario("User presses power button when TV is on") {
+
+      Given("a TV set that is switched on")
+      val tv = new TVSet
+      tv.pressPowerButton()
+      assert(tv.isOn)
+
+      When("the power button is pressed")
+      tv.pressPowerButton()
+
+      Then("the TV should switch off")
+      assert(!tv.isOn)
+    }
+  }
+}
+#+end_src
+
+Output :
+#+begin_example
+As a TV set owner 
+I want to be able to turn the TV on and off 
+So I can watch TV when I want 
+And save energy when I'm not watching TV 
+Feature: TV power button
+  Scenario: User presses power button when TV is off
+    Given a TV set that is switched off 
+    When the power button is pressed 
+    Then the TV should switch on 
+  Scenario: User presses power button when TV is on
+    Given a TV set that is switched on 
+    When the power button is pressed 
+    Then the TV should switch off 
+#+end_example
+
 ** Asserts/Inspectors
 *** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors][Inspectors]]
 
@@ -428,7 +503,6 @@ xs: List[Int] = List(1, 2, 3, 4, 5)
 
 **** two styles of asserts (demonstrate)
 
-
 ** Notes on Libraries
 
 *** New in ScalaTest 3.0
@@ -441,3 +515,7 @@ xs: List[Int] = List(1, 2, 3, 4, 5)
 *** Scalactic
 - In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with "galactic").
 - in 3.0 support Scala.JS
+
+*** Other Notes
+- org.scalatest.matchers.ShouldMatchers -- deprecated: use org.scalatest.Matchers
+- 
