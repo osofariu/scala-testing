@@ -178,7 +178,7 @@ An empty Set
 - Facilitates a BDD-style, in which tests are nested inside text clauses denoted with the
   dash operator (-).
 - It enforces no structure, so you have maximum flexibility.
-- It has a version of path.FreeSpec just like FunSpec (extending OneInstancePerTest) 
+- It has a version of path.FreeSpec just like FunSpec (extending OneInstancePerTest)
 - Lack of structure makes it attractive to non-English speakers
 
 #+begin_src scala
@@ -371,7 +371,7 @@ Output:
 - Each test represents one *scenario* of a *feature*
 - With GivenWhenThen it looks like Gerkin syntax
 
-#+begin_src
+#+begin_src scala
 package org.scalatest.examples.featurespec
 
 import org.scalatest._
@@ -424,20 +424,21 @@ class TVSetSpec extends FeatureSpec with GivenWhenThen {
 
 Output :
 #+begin_example
-As a TV set owner 
-I want to be able to turn the TV on and off 
-So I can watch TV when I want 
-And save energy when I'm not watching TV 
+As a TV set owner
+I want to be able to turn the TV on and off
+So I can watch TV when I want
+And save energy when I'm not watching TV
 Feature: TV power button
   Scenario: User presses power button when TV is off
-    Given a TV set that is switched off 
-    When the power button is pressed 
-    Then the TV should switch on 
+    Given a TV set that is switched off
+    When the power button is pressed
+    Then the TV should switch on
   Scenario: User presses power button when TV is on
-    Given a TV set that is switched on 
-    When the power button is pressed 
-    Then the TV should switch off 
+    Given a TV set that is switched on
+    When the power button is pressed
+    Then the TV should switch off
 #+end_example
+
 
 ** Asserts/Inspectors
 *** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors][Inspectors]]
@@ -478,18 +479,24 @@ xs: List[Int] = List(1, 2, 3, 4, 5)
 ** ScalaTest in detail (with FunSpec)
 *** how to ignore tests
 **** Informers, Documenters, Notifiers, Alerters
-- See: testingscala.report.ReportOnSpec 
+***** [[../src/test/scala/testingscala/report/ReportOnSpec.scala][ReportOnSpec]]
+- *notifications* and *alerts* are reported immediately
+- *info* and *markup* are delayed until results of the test are known
+- Note: path.FunSpec by default supports info, but not: markup, note, and alert.
+- You won't see the nice notifications in Intellij (far as I know), but will in SBT
 
 **** Pending tests
+***** [[../src/test/scala/testingscala/certaintests/OmitSpec.scala][OmitSpec]
 - See: testingscala.certaintests.OmitSpec
-  
+
 **** Tagging tests
 - See: testingscala.certaintests.TagSpec
-  
-**** Shared fixtures
 
-- see if I can get this to work, to show the source:
-#+!include ~/prog/projects/scala-testing/src/test/testingscala/fixtures/ExamplesWithFixture.scala
+**** Shared fixtures
+***** [[../src/test/scala/testingscala/fixtures/ExampleWithFixture.scala][ExampleWithFixture.scala]]
+- one example of using traits to implement fixtures
+- another one using an anonymous object
+- also demonstrating mixing in the BeforeAndAfter trait
 
 **** refactoring
 **** get-fixture
@@ -518,4 +525,4 @@ xs: List[Int] = List(1, 2, 3, 4, 5)
 
 *** Other Notes
 - org.scalatest.matchers.ShouldMatchers -- deprecated: use org.scalatest.Matchers
-- 
+-

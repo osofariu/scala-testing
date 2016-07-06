@@ -2,32 +2,26 @@ package testingscala.report
 
 import org.scalatest.GivenWhenThen
 import org.scalatest.exceptions.TestFailedException
+import org.scalatest.FunSpec
+class ReportOnSpec extends FunSpec with GivenWhenThen {
 
-/* path.FunSpec is not so much fun in some respects:
-    - it doesn't allow mark-up at the class-level
-    - it only shows additional information passed to Informer
-    - it does NOT report information for: Documenters (markup), Notifiers (note), Alerters (alert)
-*/
+  describe("When I run a test I can report useful information about it") {
 
-class ReportOnSpec extends org.scalatest.FunSpec with GivenWhenThen {
-
-  describe("Notes and Alerts: When I run a test I can report useful information about that test") {
-
-    it("Test1: when running a test I will see notifications and alerts immediately") {
+    it("I will see notifications and alerts immediately") {
       note("Test1/note: empty set must be empty. Yay.")
       alert("Test1/alert: this may be seen before the output for the test itself")
       assert(Set().empty.isEmpty)
     }
   }
 
-  describe("Describe2: info and markup get reported after the results of the test are known") {
+  describe("I will see info and markup after the results of the test are known") {
 
     it("info and markup are shown in green if the test was successful") {
-      markup("Test2 / markup: this test intercepts an expected exception")
+      markup("this test intercepts an expected exception")
       intercept[TestFailedException] {
         assert(Set().empty.nonEmpty)
       }
-      info("Test2/note: the exception was of type: TestFailedException")
+      info("the exception was of type: TestFailedException")
     }
 
     it("info and markup are shown in red if the test was unsuccessful") {
