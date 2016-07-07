@@ -5,51 +5,36 @@ import testingscala.BaseSpec
 
 class AssertsSpec extends BaseSpec {
 
-  describe("assert gives better information on errors") {
+  describe("scalatest assert gives better information on errors than scala's assert") {
     val left = 1
     val right = 2
 
     it("tells you exactly where the error was") {
-      intercept[TestFailedException] {
+      val result = intercept[TestFailedException] {
         assert(left == right)
       }
-      /*
-        1 did not equal 2
-        ScalaTestFailureLocation: testingscala.asserts.AssertsTest$$anonfun$1$$anonfun$apply$mcV$sp$1 at (AssertsTest.scala:12)
-        org.scalatest.exceptions.TestFailedException: 1 did not equal 2
-	      at org.scalatest.Assertions$class.newAssertionFailedException(Assertions.scala:528)
-	      ....
-       */
+      assert(result.getMessage() == "1 did not equal 2")
     }
+
 
     it("Scala's built-in assert is somewhat less useful") {
-      intercept[AssertionError] {
+      val result = intercept[AssertionError] {
         scala.Predef.assert(left == right)
       }
-      /*
-        assertion failed
-        java.lang.AssertionError: assertion failed
-	      at scala.Predef$.assert(Predef.scala:156)
-	      at testingscala.asserts.AssertsTest$$anonfun$1$$anonfun$apply$mcV$sp$2.apply$mcV$sp(AssertsTest.scala:23)
-	      ....
-     */
+      assert(result.getMessage == "assertion failed")
     }
 
+
     it("also provides assertResult as another style for asserting expected values") {
-      intercept[TestFailedException] {
+      val result = intercept[TestFailedException] {
         assertResult(2) {
           right - left
         }
       }
-      /*
-        Expected 2, but got 1
-        ScalaTestFailureLocation: testingscala.asserts.AssertsTest$$anonfun$1$$anonfun$apply$mcV$sp$3 at (AssertsTest.scala:34)
-        org.scalatest.exceptions.TestFailedException: Expected 2, but got 1
-	      at org.scalatest.Assertions$class.newAssertionFailedException(Assertions.scala:528)
-       */
+      assert(result.getMessage() == "Expected 2, but got 1")
     }
 
-    it("forcing failures, to make sure the code does not get to ") {
+    it("you can force failures, to make sure the code does not get to that point") {
       val s = "hi"
       try {
         s.charAt(-1)
@@ -60,33 +45,22 @@ class AssertsSpec extends BaseSpec {
       }
     }
 
-    it("has assumption which throws TestCanceledException when assumption is not met") {
+
+    it("you can set up assumptions to make sure your tests have what they need") {
       assume(1 == 1)
-      assume(1 != Some(1)) // this passes!  Will use superSafe later to catch issues like this
-      try {
+      val result = intercept[TestCanceledException] {
         assume(1 == 2) // this is the same as cancel()
       }
-      catch {
-        case e: TestCanceledException => {
-          assert(e.message == None)
-        }
 
-        /*
-        TestCanceledException is nice because it makes explicit the fact that there's a problem with
-        running the test. The test didn't fail, because it couldn't even be run properly.
-       */
-      }
+      assert(result.message.isEmpty)
     }
 
-    it("some additional support for checking assumptions") {
-      try {
-        cancel("problem here")
+    it("you can assertively cancel a test if assumptions are not met") {
+      val result = intercept[TestCanceledException] {
+        cancel("we have a problem here")
       }
-      catch {
-        case e: TestCanceledException => {
-          assert(e.message.get == "problem here")
-        }
-      }
+
+      assert(result.getMessage() == "we have a problem here")
     }
   }
 }

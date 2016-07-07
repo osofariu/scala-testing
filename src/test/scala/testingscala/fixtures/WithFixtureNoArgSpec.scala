@@ -4,7 +4,7 @@ import java.io.{File, FileReader, FileWriter}
 
 import org.scalatest._
 
-class FixtureWithSpec extends FunSpec {
+class WithFixtureNoArgSpec extends FunSpec {
 
   //The withFixture(NoArgTest) method exists so that you can override it
   // and set a fixture up before, and clean it up after, each test.

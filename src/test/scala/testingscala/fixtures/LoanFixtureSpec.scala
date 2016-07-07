@@ -6,16 +6,16 @@ import java.util.UUID.randomUUID
 import testingscala.BaseSpec
 import testingscala.fixtures.DbServer._
 
-class LoanFixturesNoArgSpec extends BaseSpec {
+class LoanFixtureSpec extends BaseSpec {
 
   def withDatabase(testCode: StringDatabase => Any) {
-    val dbName = randomUUID.toString                                 // use random name to prevent test collision
+    val dbName = randomUUID.toString // use random name to prevent test collision
     val database = createDb(dbName)
     try {
-      database.insert("table1", "ScalaTest is ")                    // setup initial data
-      testCode(database)                                            // "loan" the fixture to the test
+      database.insert("table1", "ScalaTest is ") // setup initial data
+      testCode(database) // "loan" the fixture to the test
     }
-    finally removeDb(dbName)                                        // clean up the fixture
+    finally removeDb(dbName) // clean up the fixture
   }
 
   def withFile(testCode: (File, FileWriter) => Any) {
@@ -38,10 +38,12 @@ class LoanFixturesNoArgSpec extends BaseSpec {
       }
     }
 
-    it("inserting a string in a table, I can find it in that table")(withDatabase { db =>
-      db.insert("table1", "readable!")
-      assert(db.select("table1") === "ScalaTest is readable!")
-    })
+    it("inserting a string in a table, I can find it in that table") {
+      withDatabase { db =>
+        db.insert("table1", "readable!")
+        assert(db.select("table1") === "ScalaTest is readable!")
+      }
+    }
 
 
     it("I can use both fixtures at the same time!") {

@@ -4,9 +4,13 @@ import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 
 class ExampleWithFixture extends FlatSpec with Matchers with BeforeAndAfter {
 
-  trait TraitFixture {
+  trait Fixture {
     val intValue = 20
     val strValue = "twenty"
+  }
+
+  trait TheOtherFixture {
+    val theOtherOne = 99
   }
 
   def objectFixture = new {
@@ -19,9 +23,10 @@ class ExampleWithFixture extends FlatSpec with Matchers with BeforeAndAfter {
   }
 
   "Using trait-based fixture" should "give us a way to re-use fixture code" in {
-    new TraitFixture {
+    new Fixture with TheOtherFixture {
       intValue shouldEqual 20
       strValue shouldBe "twenty"
+      theOtherOne shouldBe 99
     }
   }
 

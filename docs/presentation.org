@@ -19,6 +19,7 @@ libraryDependencies ++=  Seq(
 )
 #+end_example
 
+
 ** Setting-up Super-safe
 [[http://www.scalatest.org/supersafe][SuperSafe]] is a scala compiler plugin that catches certain issues at compile-time.
 
@@ -53,6 +54,7 @@ $ echo "resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/rel
 - this is very cool: you get instant feedback as soon as you save code changes
 - I use it with IntelliJ, running sbt under IntelliJ terminal window
 
+
 ** SBT command-line arguments
 
 | task           | description                                                                                   |
@@ -70,6 +72,7 @@ $ echo "resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/rel
 |                | Needed if you change the build definition.                                                    |
 | help <command> | Displays detailed help for the specified command.                                             |
 |                | If no command is provided, displays brief descriptions of all commands.                       |
+
 
 ** SBT Tasks (from within sbt)
 *** *test*
@@ -103,7 +106,7 @@ testOnly *TagSpec -- -l SlowTest  // exclude these tags
 - The tests that have one or more transitive dependencies, maybe in a different project,
   recompiled.
 
-
+ 
 * ScalaTest
 
 ** Testing Styles
@@ -476,53 +479,102 @@ xs: List[Int] = List(1, 2, 3, 4, 5)
   assert(left == right)
 #+end_src
 
+
 ** ScalaTest in detail (with FunSpec)
-*** how to ignore tests
-**** Informers, Documenters, Notifiers, Alerters
-***** [[../src/test/scala/testingscala/report/ReportOnSpec.scala][ReportOnSpec]]
+*** Informers, Documenters, Notifiers, Alerters
+**** [[../src/test/scala/testingscala/report/ReportOnSpec.scala][ReportOnSpec.scala]]
 - *notifications* and *alerts* are reported immediately
 - *info* and *markup* are delayed until results of the test are known
 - Note: path.FunSpec by default supports info, but not: markup, note, and alert.
 - You won't see the nice notifications in Intellij (far as I know), but will in SBT
 
-**** Pending tests
-***** [[../src/test/scala/testingscala/certaintests/OmitSpec.scala][OmitSpec]
-- See: testingscala.certaintests.OmitSpec
+*** Tagging, pending, omitting tests
+**** [[../src/test/scala/testingscala/certaintests/OmitSpec.scala][OmitSpec.scala]]
+- How to ignore tests
+- How to pend tests (that don't have a body yet)
+**** [[../src/test/scala/testingscala/certaintests/TagSpec.scala][TagSpec.scala]]
+:- use tagging to selectively run different types of tests
 
-**** Tagging tests
-- See: testingscala.certaintests.TagSpec
+*** Sharing fixtures between tests
+There are several techniques that help you eliminate duplication in the setup/cleanup of
+tests.  Here are some of them:
 
-**** Shared fixtures
-***** [[../src/test/scala/testingscala/fixtures/ExampleWithFixture.scala][ExampleWithFixture.scala]]
-- one example of using traits to implement fixtures
-- another one using an anonymous object
-- also demonstrating mixing in the BeforeAndAfter trait
+**** [[../src/test/scala/testingscala/fixtures/ExampleWithFixture.scala][ExampleWithFixture.scala]]
+- The first test uses traits to set up mutable fixture objects using fixture-context
+  objects
+- The second one uses an anonymous object to do the same thing using get-fixture methods
+- Using traits seems more elegant
+- Also demonstrating *mixing in the BeforeAndAfter trait* that can be used to do setup and
+  tear-down of common fixture.
+  
+*** Loaning fixtures
+**** [[../src/test/scala/testingscala/fixtures/LoanFixtureSpec.scala][LoanFixtureSpec.scala]]
+- roll your own fixtures as methods that take a closure as an argument.  In your test you
+  call these methods and make the body of the test a closure you pass back into the
+  fixture
 
-**** refactoring
-**** get-fixture
-**** fixture-context objects
-**** withFixture(NoArgTest)
-**** loan-fixture
-**** withFixture(OneArgTest)
-**** mixing in BeforeAndAfter
-**** composing fixtures by stacking traits
-**** Shared tests
+*** Using WithFixture
+**** [[../src/test/scala/testingscala/fixtures/WithFixtureNoArgSpec.scala][WithFixtureNoArgSpec.scala]]
+- set-up fixture methods that loan themselves to the test
+- just by overriding WithFixture(test: NoArgTest)  you can define setup and cleanup code
+  in one place, and the test framework calls that automatically for every test
 
-**** two styles of asserts (demonstrate)
+**** [[../src/test/scala/testingscala/fixtures/WithFixtureOneArgSpec.scala][WithFixtureOneArgSpec.scala]]
+- extends fixture.FunSpec
+- you can set up a fixture in your test class:
+  - define FixtureParam class
+  - implement withFixture(test: OneArgTest)
+- it's more elegant than the previous techniques we've used
+  
+**** [[../src/test/scala/testingscala/fixtures/WithFixtureTraitOneArgSpec.scala][WithFixtureTraitOneArgSpec.scala]]
+- To share fixtures *across classes*, define FixtureParam and withFixture in a trait, and
+  mix it in any test classes that need this fixture.
+- brief explanation of [[http://stackoverflow.com/questions/8073263/explicit-self-references-with-no-type-difference-with-this][explict self-reference]]
+- "it" returns an object that registers the test, and when "apply"-ing it can take a
+  FixtureParam as a argument (fixture.FunSpecLike.ItWord)
+ 
+*** Assertions
+**** [[../src/test/scala/testingscala/asserts/AssertsSpec.scala][AssertsSpec.scala]]
+- assert, assertResult
+- assume, cancel
 
-** Notes on Libraries
+**** [[../src/test/scala/testingscala/asserts/SuperSafeSpec.scala][SuperSafeSpec.scala]]
+- it catches some comparisons that scala would otherwise allow by looking more closely at
+  the types being compared
+- as a compiler plugin it gives you very useful information at compile time; and gives you
+  a nice readable description of the problem
+- For more details see: [[http://www.scalatest.org/supersafe][SuperSafe]]
 
-*** New in ScalaTest 3.0
+*** Using Matchers
+- fix-in trait scalatest.Matches
+- there are matchers in the scalatest.matchers package, but those appear to be deprecated
+- Good examples on the [[http://www.scalatest.org/user_guide/using_matchers][ScalaTest Matches]]; will not duplicate those.
+  
+  
+** Mocking with ScalaTest  
+
+
+** ScalaCheck
+
+
+** What's coming up in ScalaTest 3.0
 - now fully support Scala.js
 - *AsyncFunSuite*, *AsyncFunSpec*, *AsyncFlatSpec*, *AsyncFreeSpec*, *AsyncWordspec*, and
   *AsyncFeatureSpec* (the result type of tests is Future[Assertion])
 - *oneElementOf*, *noElementsOf*, *atLeastOneElementOf*, *atMostOneElementOf*,
   *allElementsOf*, *inOrderElementsOf*
 - Added overloaded *exists* and *forEvery* methods to TableDrivenPropertyChecks.
-*** Scalactic
+
+
+** About the Scalactic library
+
+TODO: describe it.. what's useful in it?
+
+*** Version notes
 - In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with "galactic").
 - in 3.0 support Scala.JS
 
-*** Other Notes
-- org.scalatest.matchers.ShouldMatchers -- deprecated: use org.scalatest.Matchers
--
+  
+* Specs2
+- brief examples
+- cover if time allows
