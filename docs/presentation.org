@@ -553,11 +553,19 @@ tests.  Here are some of them:
   
 ** Mocking with ScalaTest  
 
+- EasyMock and Mockito integrate with ScalaTest
+
+*** ScalaMock
+[[http://scalamock.org/]]
 
 ** ScalaCheck
 
 
-** What's coming up in ScalaTest 3.0
+** Miscellaneous Things
+
+- Integration with Selenium
+
+*** What's coming up in ScalaTest 3.0
 - now fully support Scala.js
 - *AsyncFunSuite*, *AsyncFunSpec*, *AsyncFlatSpec*, *AsyncFreeSpec*, *AsyncWordspec*, and
   *AsyncFeatureSpec* (the result type of tests is Future[Assertion])
@@ -565,12 +573,11 @@ tests.  Here are some of them:
   *allElementsOf*, *inOrderElementsOf*
 - Added overloaded *exists* and *forEvery* methods to TableDrivenPropertyChecks.
 
-
-** About the Scalactic library
+*** About the Scalactic library
 
 TODO: describe it.. what's useful in it?
 
-*** Version notes
+**** Version notes
 - In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with "galactic").
 - in 3.0 support Scala.JS
 

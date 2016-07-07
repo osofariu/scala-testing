@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-07-06 Wed 10:06 -->
+<!-- 2016-07-07 Thu 08:37 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="viewport" content="width=device-width, initial-scale=1" />
 <title>Testing in Scala</title>
@@ -166,6 +166,7 @@ libraryDependencies ++=  Seq(
 </div>
 </div>
 
+
 <div id="outline-container-orgheadline2" class="outline-3">
 <h3 id="orgheadline2">Setting-up Super-safe</h3>
 <div class="outline-text-3" id="text-orgheadline2">
@@ -220,6 +221,7 @@ sbt clean compile "testOnly TestA TestB"
 </ul>
 </div></li></ul>
 </div>
+
 
 <div id="outline-container-orgheadline9" class="outline-3">
 <h3 id="orgheadline9">SBT command-line arguments</h3>
@@ -308,6 +310,7 @@ sbt clean compile "testOnly TestA TestB"
 </div>
 </div>
 
+
 <div id="outline-container-orgheadline13" class="outline-3">
 <h3 id="orgheadline13">SBT Tasks (from within sbt)</h3>
 <div class="outline-text-3" id="text-orgheadline13">
@@ -358,9 +361,9 @@ recompiled.<br  /></li>
 </div>
 
 
-<div id="outline-container-orgheadline47" class="outline-2">
-<h2 id="orgheadline47">ScalaTest</h2>
-<div class="outline-text-2" id="text-orgheadline47">
+<div id="outline-container-orgheadline50" class="outline-2">
+<h2 id="orgheadline50">ScalaTest</h2>
+<div class="outline-text-2" id="text-orgheadline50">
 </div><div id="outline-container-orgheadline15" class="outline-3">
 <h3 id="orgheadline15">Testing Styles</h3>
 <div class="outline-text-3" id="text-orgheadline15">
@@ -837,111 +840,127 @@ assert(left == right)
 </div></li></ul>
 </div>
 
-<div id="outline-container-orgheadline42" class="outline-3">
-<h3 id="orgheadline42">ScalaTest in detail (with FunSpec)</h3>
-<div class="outline-text-3" id="text-orgheadline42">
-</div><ul class="org-ul"><li><a id="orgheadline41"></a>how to ignore tests<br  /><ul class="org-ul"><li><a id="orgheadline27"></a>Informers, Documenters, Notifiers, Alerters<br  /><div class="outline-text-5" id="text-orgheadline27">
+
+<div id="outline-container-orgheadline44" class="outline-3">
+<h3 id="orgheadline44">ScalaTest in detail (with FunSpec)</h3>
+<div class="outline-text-3" id="text-orgheadline44">
+</div><ul class="org-ul"><li><a id="orgheadline28"></a>Informers, Documenters, Notifiers, Alerters<br  /><ul class="org-ul"><li><a id="orgheadline27"></a><a href="../src/test/scala/testingscala/report/ReportOnSpec.scala">ReportOnSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline27">
 <ul class="org-ul">
-<li>See: testingscala.report.ReportOnSpec<br  /></li>
+<li><b>notifications</b> and <b>alerts</b> are reported immediately<br  /></li>
+<li><b>info</b> and <b>markup</b> are delayed until results of the test are known<br  /></li>
+<li>Note: path.FunSpec by default supports info, but not: markup, note, and alert.<br  /></li>
+<li>You won&rsquo;t see the nice notifications in Intellij (far as I know), but will in SBT<br  /></li>
+</ul>
+</div></li></ul></li>
+
+<li><a id="orgheadline31"></a>Tagging, pending, omitting tests<br  /><ul class="org-ul"><li><a id="orgheadline29"></a><a href="../src/test/scala/testingscala/certaintests/OmitSpec.scala">OmitSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline29">
+<ul class="org-ul">
+<li>How to ignore tests<br  /></li>
+<li>How to pend tests (that don&rsquo;t have a body yet)<br  /></li>
 </ul>
 </div></li>
-
-<li><a id="orgheadline28"></a>Pending tests<br  /><div class="outline-text-5" id="text-orgheadline28">
-<ul class="org-ul">
-<li>See: testingscala.certaintests.OmitSpec<br  /></li>
-</ul>
-</div></li>
-
-<li><a id="orgheadline29"></a>Tagging tests<br  /><div class="outline-text-5" id="text-orgheadline29">
-<ul class="org-ul">
-<li>See: testingscala.certaintests.TagSpec<br  /></li>
-</ul>
-</div></li>
-
-<li><a id="orgheadline30"></a>Shared fixtures<br  /><div class="outline-text-5" id="text-orgheadline30">
-<ul class="org-ul">
-<li>see if I can get this to work, to show the source:<br  /></li>
-</ul>
-
+<li><a id="orgheadline30"></a><a href="../src/test/scala/testingscala/certaintests/TagSpec.scala">TagSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline30">
 <p>
-package testingscala.fixtures<br  />
+:- use tagging to selectively run different types of tests<br  />
 </p>
+</div></li></ul></li>
 
+<li><a id="orgheadline32"></a>Sharing fixtures between tests<br  /><div class="outline-text-4" id="text-orgheadline32">
 <p>
-import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}<br  />
+There are several techniques that help you eliminate duplication in the setup/cleanup of<br  />
+tests.  Here are some of them:<br  />
 </p>
-
-<p>
-class ExampleWithFixture extends FlatSpec with Matchers with BeforeAndAfter {<br  />
-</p>
-
-<p>
-trait TraitFixture {<br  />
-  val intValue = 20<br  />
-  val strValue = &ldquo;twenty&rdquo;<br  />
-}<br  />
-</p>
-
-<p>
-def objectFixture = new {<br  />
-  val intValue = 30<br  />
-  val strValue = &ldquo;boo&rdquo;<br  />
-}<br  />
-</p>
-
-<p>
-before {<br  />
-  info(&ldquo;before test&rdquo;)<br  />
-}<br  />
-</p>
-
-<p>
-&ldquo;Using trait-based fixture&rdquo; should &ldquo;give us a way to re-use fixture code&rdquo; in {<br  />
-  new TraitFixture {<br  />
-    intValue shouldEqual 20<br  />
-    strValue shouldBe &ldquo;twenty&rdquo;<br  />
-  }<br  />
-}<br  />
-</p>
-
-<p>
-&ldquo;Using anonymous object fixtures&rdquo; should &ldquo;give us another&rdquo; in {<br  />
-  objectFixture.intValue shouldEqual 30<br  />
-  assert(objectFixture.strValue <code>=</code> &ldquo;boo&rdquo;)<br  />
-}<br  />
-</p>
-
-<p>
-  after {<br  />
-    info(&ldquo;after test&rdquo;)<br  />
-  }<br  />
-}<br  />
-</p>
-
-
-
-<p>
-// talk a little about Scalactic if I haven&rsquo;t already.<br  />
-</p>
-</div></li>
-
-<li><a id="orgheadline31"></a>refactoring<br  /></li>
-<li><a id="orgheadline32"></a>get-fixture<br  /></li>
-<li><a id="orgheadline33"></a>fixture-context objects<br  /></li>
-<li><a id="orgheadline34"></a>withFixture(NoArgTest)<br  /></li>
-<li><a id="orgheadline35"></a>loan-fixture<br  /></li>
-<li><a id="orgheadline36"></a>withFixture(OneArgTest)<br  /></li>
-<li><a id="orgheadline37"></a>mixing in BeforeAndAfter<br  /></li>
-<li><a id="orgheadline38"></a>composing fixtures by stacking traits<br  /></li>
-<li><a id="orgheadline39"></a>Shared tests<br  /></li>
-
-<li><a id="orgheadline40"></a>two styles of asserts (demonstrate)<br  /></li></ul></li></ul>
 </div>
 
+<ul class="org-ul"><li><a id="orgheadline33"></a><a href="../src/test/scala/testingscala/fixtures/ExampleWithFixture.scala">ExampleWithFixture.scala</a><br  /><div class="outline-text-5" id="text-orgheadline33">
+<ul class="org-ul">
+<li>The first test uses traits to set up mutable fixture objects using fixture-context<br  />
+objects<br  /></li>
+<li>The second one uses an anonymous object to do the same thing using get-fixture methods<br  /></li>
+<li>Using traits seems more elegant<br  /></li>
+<li>Also demonstrating <b>mixing in the BeforeAndAfter trait</b> that can be used to do setup and<br  />
+tear-down of common fixture.<br  /></li>
+</ul>
+</div></li></ul></li>
+
+<li><a id="orgheadline35"></a>Loaning fixtures<br  /><ul class="org-ul"><li><a id="orgheadline34"></a><a href="../src/test/scala/testingscala/fixtures/LoanFixtureSpec.scala">LoanFixtureSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline34">
+<ul class="org-ul">
+<li>roll your own fixtures as methods that take a closure as an argument.  In your test you<br  />
+call these methods and make the body of the test a closure you pass back into the<br  />
+fixture<br  /></li>
+</ul>
+</div></li></ul></li>
+
+<li><a id="orgheadline39"></a>Using WithFixture<br  /><ul class="org-ul"><li><a id="orgheadline36"></a><a href="../src/test/scala/testingscala/fixtures/WithFixtureNoArgSpec.scala">WithFixtureNoArgSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline36">
+<ul class="org-ul">
+<li>set-up fixture methods that loan themselves to the test<br  /></li>
+<li>just by overriding WithFixture(test: NoArgTest)  you can define setup and cleanup code<br  />
+in one place, and the test framework calls that automatically for every test<br  /></li>
+</ul>
+</div></li>
+
+<li><a id="orgheadline37"></a><a href="../src/test/scala/testingscala/fixtures/WithFixtureOneArgSpec.scala">WithFixtureOneArgSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline37">
+<ul class="org-ul">
+<li>extends fixture.FunSpec<br  /></li>
+<li>you can set up a fixture in your test class:<br  />
+<ul class="org-ul">
+<li>define FixtureParam class<br  /></li>
+<li>implement withFixture(test: OneArgTest)<br  /></li>
+</ul></li>
+<li>it&rsquo;s more elegant than the previous techniques we&rsquo;ve used<br  /></li>
+</ul>
+</div></li>
+
+<li><a id="orgheadline38"></a><a href="../src/test/scala/testingscala/fixtures/WithFixtureTraitOneArgSpec.scala">WithFixtureTraitOneArgSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline38">
+<ul class="org-ul">
+<li>To share fixtures <b>across classes</b>, define FixtureParam and withFixture in a trait, and<br  />
+mix it in any test classes that need this fixture.<br  /></li>
+<li>brief explanation of <a href="http://stackoverflow.com/questions/8073263/explicit-self-references-with-no-type-difference-with-this">explict self-reference</a><br  /></li>
+<li>&ldquo;it&rdquo; returns an object that registers the test, and when &ldquo;apply&rdquo;-ing it can take a<br  />
+FixtureParam as a argument (fixture.FunSpecLike.ItWord)<br  /></li>
+</ul>
+</div></li></ul></li>
+
+<li><a id="orgheadline42"></a>Assertions<br  /><ul class="org-ul"><li><a id="orgheadline40"></a><a href="../src/test/scala/testingscala/asserts/AssertsSpec.scala">AssertsSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline40">
+<ul class="org-ul">
+<li>assert, assertResult<br  /></li>
+<li>assume, cancel<br  /></li>
+</ul>
+</div></li>
+
+<li><a id="orgheadline41"></a><a href="../src/test/scala/testingscala/asserts/SuperSafeSpec.scala">SuperSafeSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline41">
+<ul class="org-ul">
+<li>it catches some comparisons that scala would otherwise allow by looking more closely at<br  />
+the types being compared<br  /></li>
+<li>as a compiler plugin it gives you very useful information at compile time; and gives you<br  />
+a nice readable description of the problem<br  /></li>
+<li>For more details see: <a href="http://www.scalatest.org/supersafe">SuperSafe</a><br  /></li>
+</ul>
+</div></li></ul></li>
+
+<li><a id="orgheadline43"></a>Using Matchers<br  /><div class="outline-text-4" id="text-orgheadline43">
+<ul class="org-ul">
+<li>fix-in trait scalatest.Matches<br  /></li>
+<li>there are matchers in the scalatest.matchers package, but those appear to be deprecated<br  /></li>
+<li>Good examples on the <a href="http://www.scalatest.org/user_guide/using_matchers">ScalaTest Matches</a>; will not duplicate those.<br  /></li>
+</ul>
+</div></li></ul>
+</div>
+
+
+<div id="outline-container-orgheadline45" class="outline-3">
+<h3 id="orgheadline45">Mocking with ScalaTest</h3>
+</div>
+
+
 <div id="outline-container-orgheadline46" class="outline-3">
-<h3 id="orgheadline46">Notes on Libraries</h3>
-<div class="outline-text-3" id="text-orgheadline46">
-</div><ul class="org-ul"><li><a id="orgheadline43"></a>New in ScalaTest 3.0<br  /><div class="outline-text-4" id="text-orgheadline43">
+<h3 id="orgheadline46">ScalaCheck</h3>
+</div>
+
+
+<div id="outline-container-orgheadline47" class="outline-3">
+<h3 id="orgheadline47">What&rsquo;s coming up in ScalaTest 3.0</h3>
+<div class="outline-text-3" id="text-orgheadline47">
 <ul class="org-ul">
 <li>now fully support Scala.js<br  /></li>
 <li><b>AsyncFunSuite</b>, <b>AsyncFunSpec</b>, <b>AsyncFlatSpec</b>, <b>AsyncFreeSpec</b>, <b>AsyncWordspec</b>, and<br  />
@@ -950,27 +969,42 @@ before {<br  />
 <b>allElementsOf</b>, <b>inOrderElementsOf</b><br  /></li>
 <li>Added overloaded <b>exists</b> and <b>forEvery</b> methods to TableDrivenPropertyChecks.<br  /></li>
 </ul>
-</div></li>
-<li><a id="orgheadline44"></a>Scalactic<br  /><div class="outline-text-4" id="text-orgheadline44">
+</div>
+</div>
+
+
+<div id="outline-container-orgheadline48" class="outline-3">
+<h3 id="orgheadline48">About the Scalactic library</h3>
+<div class="outline-text-3" id="text-orgheadline48">
+<p>
+TODO: describe it.. what&rsquo;s useful in it?<br  />
+</p>
+</div>
+
+<ul class="org-ul"><li><a id="orgheadline49"></a>Version notes<br  /><div class="outline-text-4" id="text-orgheadline49">
 <ul class="org-ul">
 <li>In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with &ldquo;galactic&rdquo;).<br  /></li>
 <li>in 3.0 support Scala.JS<br  /></li>
 </ul>
-</div></li>
-
-<li><a id="orgheadline45"></a>Other Notes<br  /><div class="outline-text-4" id="text-orgheadline45">
-<ul class="org-ul">
-<li>org.scalatest.matchers.ShouldMatchers &#x2013; deprecated: use org.scalatest.Matchers<br  /></li>
-<li></li>
-</ul>
 </div></li></ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgheadline51" class="outline-2">
+<h2 id="orgheadline51">Specs2</h2>
+<div class="outline-text-2" id="text-orgheadline51">
+<ul class="org-ul">
+<li>brief examples<br  /></li>
+<li>cover if time allows<br  /></li>
+</ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="date">Date: July 11, 2016</p>
 <p class="author">Author: Ovi Sofariu</p>
-<p class="date">Created: 2016-07-06 Wed 10:06</p>
+<p class="date">Created: 2016-07-07 Thu 08:37</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
