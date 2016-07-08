@@ -11,7 +11,7 @@ class SuperSafeSpec extends BaseSpec {
     }
 
     it("but using SupeSafe it will be clear that I made a mistake") {
-      // assume(1 !== Some(1))  // this does not allow me to compile my code!
+      assume(1 !== Some(1))  // this does not allow me to compile my code if I use SuperSafe
     }
   }
 }

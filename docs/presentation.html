@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-07-07 Thu 08:37 -->
+<!-- 2016-07-08 Fri 07:43 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="viewport" content="width=device-width, initial-scale=1" />
 <title>Testing in Scala</title>
@@ -150,12 +150,30 @@ for the JavaScript code in this tag.
 You can follow this presentation at: <a href="https://osofariu.github.io/preso/presentation.html">https://osofariu.github.io/preso/presentation.html</a><br  />
 </p>
 
-<div id="outline-container-orgheadline5" class="outline-2">
-<h2 id="orgheadline5">SBT Setup</h2>
-<div class="outline-text-2" id="text-orgheadline5">
-</div><div id="outline-container-orgheadline1" class="outline-3">
-<h3 id="orgheadline1">Setting-up the project in build.sbt</h3>
-<div class="outline-text-3" id="text-orgheadline1">
+
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">Introduction</h2>
+<div class="outline-text-2" id="text-orgheadline1">
+<ul class="org-ul">
+<li>General setup, and getting started<br  /></li>
+<li>Mostly covering ScalaTest<br  />
+<ul class="org-ul">
+<li>flavors of tests<br  /></li>
+<li>practices for re-using fixtures<br  /></li>
+<li>asserts, matchers, etc.<br  /></li>
+</ul></li>
+<li>ScalaCheck<br  /></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgheadline6" class="outline-2">
+<h2 id="orgheadline6">SBT Setup</h2>
+<div class="outline-text-2" id="text-orgheadline6">
+</div><div id="outline-container-orgheadline2" class="outline-3">
+<h3 id="orgheadline2">Setting-up the project in build.sbt</h3>
+<div class="outline-text-3" id="text-orgheadline2">
 <pre class="example">
 libraryDependencies ++=  Seq(
   "org.scalatest"  %% "scalatest" % "3.0.0-RC3" % "test" withSources() withJavadoc(),
@@ -167,21 +185,24 @@ libraryDependencies ++=  Seq(
 </div>
 
 
-<div id="outline-container-orgheadline2" class="outline-3">
-<h3 id="orgheadline2">Setting-up Super-safe</h3>
-<div class="outline-text-3" id="text-orgheadline2">
+<div id="outline-container-orgheadline3" class="outline-3">
+<h3 id="orgheadline3">Setting-up Super-safe</h3>
+<div class="outline-text-3" id="text-orgheadline3">
 <p>
 <a href="http://www.scalatest.org/supersafe">SuperSafe</a> is a scala compiler plugin that catches certain issues at compile-time.<br  />
 </p>
+<ul class="org-ul">
+<li>Note that <b>I have turned it off in my project for now.</b><br  /></li>
+</ul>
 </div>
 
-<ul class="org-ul"><li><a id="orgheadline3"></a>add plugin for super-safe in project/plugins.sbt<br  /><div class="outline-text-4" id="text-orgheadline3">
+<ul class="org-ul"><li><a id="orgheadline4"></a>add plugin for super-safe in project/plugins.sbt<br  /><div class="outline-text-4" id="text-orgheadline4">
 <pre class="example">
 addSbtPlugin("com.artima.supersafe" % "sbtplugin" % "1.1.0-RC7")
 </pre>
 </div></li>
 
-<li><a id="orgheadline4"></a>outside of the project, add resolver:<br  /><div class="outline-text-4" id="text-orgheadline4">
+<li><a id="orgheadline5"></a>outside of the project, add resolver:<br  /><div class="outline-text-4" id="text-orgheadline5">
 <ul class="org-ul">
 <li>If you want to import the project from GitHub into Intellij, <b>you need to do this step first</b>,<br  />
 so it can find the plugin when setting up the project.<br  /></li>
@@ -198,19 +219,19 @@ $ echo <span style="color: #008000;">"resolvers += \"Artima Maven Repository\" a
 </div>
 
 
-<div id="outline-container-orgheadline14" class="outline-2">
-<h2 id="orgheadline14">Running tests with SBT</h2>
-<div class="outline-text-2" id="text-orgheadline14">
-</div><div id="outline-container-orgheadline8" class="outline-3">
-<h3 id="orgheadline8">SBT basics</h3>
-<div class="outline-text-3" id="text-orgheadline8">
-</div><ul class="org-ul"><li><a id="orgheadline6"></a>You can <b>chain</b> multiple commands to run tasks in batch mode, in sequential order:<br  /><div class="outline-text-4" id="text-orgheadline6">
+<div id="outline-container-orgheadline15" class="outline-2">
+<h2 id="orgheadline15">Running tests with SBT</h2>
+<div class="outline-text-2" id="text-orgheadline15">
+</div><div id="outline-container-orgheadline9" class="outline-3">
+<h3 id="orgheadline9">SBT basics</h3>
+<div class="outline-text-3" id="text-orgheadline9">
+</div><ul class="org-ul"><li><a id="orgheadline7"></a>You can <b>chain</b> multiple commands to run tasks in batch mode, in sequential order:<br  /><div class="outline-text-4" id="text-orgheadline7">
 <pre class="example">
 sbt clean compile "testOnly TestA TestB"
 </pre>
 </div></li>
 
-<li><a id="orgheadline7"></a>You can continuously compile/test as you save your source files:<br  /><div class="outline-text-4" id="text-orgheadline7">
+<li><a id="orgheadline8"></a>You can continuously compile/test as you save your source files:<br  /><div class="outline-text-4" id="text-orgheadline8">
 <pre class="example">
 ~ compile , ~ test
 ~ testOnly *FunSpecSpec   // very useful when working on a spec
@@ -223,9 +244,9 @@ sbt clean compile "testOnly TestA TestB"
 </div>
 
 
-<div id="outline-container-orgheadline9" class="outline-3">
-<h3 id="orgheadline9">SBT command-line arguments</h3>
-<div class="outline-text-3" id="text-orgheadline9">
+<div id="outline-container-orgheadline10" class="outline-3">
+<h3 id="orgheadline10">SBT command-line arguments</h3>
+<div class="outline-text-3" id="text-orgheadline10">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -311,16 +332,16 @@ sbt clean compile "testOnly TestA TestB"
 </div>
 
 
-<div id="outline-container-orgheadline13" class="outline-3">
-<h3 id="orgheadline13">SBT Tasks (from within sbt)</h3>
-<div class="outline-text-3" id="text-orgheadline13">
-</div><ul class="org-ul"><li><a id="orgheadline10"></a><b>test</b><br  /><div class="outline-text-4" id="text-orgheadline10">
+<div id="outline-container-orgheadline14" class="outline-3">
+<h3 id="orgheadline14">SBT Tasks (from within sbt)</h3>
+<div class="outline-text-3" id="text-orgheadline14">
+</div><ul class="org-ul"><li><a id="orgheadline11"></a><b>test</b><br  /><div class="outline-text-4" id="text-orgheadline11">
 <ul class="org-ul">
 <li>The test task accepts no command line arguments and runs all tests<br  /></li>
 </ul>
 </div></li>
 
-<li><a id="orgheadline11"></a><b>testOnly</b><br  /><div class="outline-text-4" id="text-orgheadline11">
+<li><a id="orgheadline12"></a><b>testOnly</b><br  /><div class="outline-text-4" id="text-orgheadline12">
 <ul class="org-ul">
 <li>this task accepts a whitespace separated list of test names to run.<br  /></li>
 <li>before version 0.13 this task was &ldquo;test-only&rdquo;. As of 0.13 they both work.<br  /></li>
@@ -349,7 +370,7 @@ testOnly *TagSpec -- -l SlowTest  // exclude these tags
 </pre>
 </div></li>
 
-<li><a id="orgheadline12"></a><b>testQuick</b> - like testOnly, but also takes into account additional filters:<br  /><div class="outline-text-4" id="text-orgheadline12">
+<li><a id="orgheadline13"></a><b>testQuick</b> - like testOnly, but also takes into account additional filters:<br  /><div class="outline-text-4" id="text-orgheadline13">
 <ul class="org-ul">
 <li>The tests that failed in the previous run<br  /></li>
 <li>The tests that were not run before<br  /></li>
@@ -361,18 +382,18 @@ recompiled.<br  /></li>
 </div>
 
 
-<div id="outline-container-orgheadline50" class="outline-2">
-<h2 id="orgheadline50">ScalaTest</h2>
-<div class="outline-text-2" id="text-orgheadline50">
-</div><div id="outline-container-orgheadline15" class="outline-3">
-<h3 id="orgheadline15">Testing Styles</h3>
-<div class="outline-text-3" id="text-orgheadline15">
+<div id="outline-container-orgheadline58" class="outline-2">
+<h2 id="orgheadline58">ScalaTest</h2>
+<div class="outline-text-2" id="text-orgheadline58">
+</div><div id="outline-container-orgheadline16" class="outline-3">
+<h3 id="orgheadline16">Testing Styles</h3>
+<div class="outline-text-3" id="text-orgheadline16">
 <p>
 <a href="http://www.scalatest.org/user_guide/selecting_a_style">http://www.scalatest.org/user_guide/selecting_a_style</a><br  />
 </p>
 </div>
 
-<ul class="org-ul"><li><a id="orgheadline16"></a><b>FunSpec</b><br  /><div class="outline-text-4" id="text-orgheadline16">
+<ul class="org-ul"><li><a id="orgheadline17"></a><b>FunSpec</b><br  /><div class="outline-text-4" id="text-orgheadline17">
 <ul class="org-ul">
 <li>Familiar to those who are used to rSpec.<br  /></li>
 <li>FunSpec allows you to nest your tests (like rSpec)<br  /></li>
@@ -417,7 +438,7 @@ demonstrates the difference<br  />
 </p>
 </div></li>
 
-<li><a id="orgheadline17"></a><b>FlatSpec</b><br  /><div class="outline-text-4" id="text-orgheadline17">
+<li><a id="orgheadline18"></a><b>FlatSpec</b><br  /><div class="outline-text-4" id="text-orgheadline18">
 <ul class="org-ul">
 <li>you can&rsquo;t nest tests<br  /></li>
 <li>you use verbs like: must, should, can to make your tests more meaningful<br  /></li>
@@ -453,7 +474,7 @@ An empty Set
 </pre>
 </div></li>
 
-<li><a id="orgheadline18"></a><b>FreeSpec</b><br  /><div class="outline-text-4" id="text-orgheadline18">
+<li><a id="orgheadline19"></a><b>FreeSpec</b><br  /><div class="outline-text-4" id="text-orgheadline19">
 <ul class="org-ul">
 <li>Facilitates a BDD-style, in which tests are nested inside text clauses denoted with the<br  />
 dash operator (-).<br  /></li>
@@ -511,7 +532,7 @@ A Stack
 </pre>
 </div></li>
 
-<li><a id="orgheadline19"></a><b>WordSpec</b><br  /><div class="outline-text-4" id="text-orgheadline19">
+<li><a id="orgheadline20"></a><b>WordSpec</b><br  /><div class="outline-text-4" id="text-orgheadline20">
 <ul class="org-ul">
 <li>Familiar to those who are used to specs or specs2<br  /></li>
 
@@ -552,7 +573,7 @@ A Set
 </pre>
 </div></li>
 
-<li><a id="orgheadline20"></a><b>Spec</b><br  /><div class="outline-text-4" id="text-orgheadline20">
+<li><a id="orgheadline21"></a><b>Spec</b><br  /><div class="outline-text-4" id="text-orgheadline21">
 <ul class="org-ul">
 <li>It allows you to define tests as methods, which saves one function literal per test<br  />
 which translates into faster compile times and fewer generated class files, which can<br  />
@@ -594,7 +615,7 @@ A Set
 </pre>
 </div></li>
 
-<li><a id="orgheadline21"></a><b>FunSuite</b><br  /><div class="outline-text-4" id="text-orgheadline21">
+<li><a id="orgheadline22"></a><b>FunSuite</b><br  /><div class="outline-text-4" id="text-orgheadline22">
 <ul class="org-ul">
 <li>For those who like xUnit-style tests<br  /></li>
 </ul>
@@ -627,7 +648,7 @@ Output:<br  />
 </pre>
 </div></li>
 
-<li><a id="orgheadline22"></a><b>PropSpec</b><br  /><div class="outline-text-4" id="text-orgheadline22">
+<li><a id="orgheadline23"></a><b>PropSpec</b><br  /><div class="outline-text-4" id="text-orgheadline23">
 <div class="org-src-container">
 
 <pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #0000FF;">_</span>
@@ -668,7 +689,7 @@ Output:<br  />
 </pre>
 </div></li>
 
-<li><a id="orgheadline23"></a><b>FeatureSpec</b><br  /><div class="outline-text-4" id="text-orgheadline23">
+<li><a id="orgheadline24"></a><b>FeatureSpec</b><br  /><div class="outline-text-4" id="text-orgheadline24">
 <ul class="org-ul">
 <li>Each test represents one <b>scenario</b> of a <b>feature</b><br  /></li>
 <li>With GivenWhenThen it looks like Gerkin syntax<br  /></li>
@@ -749,13 +770,133 @@ Feature: TV power button
 </div>
 
 
-<div id="outline-container-orgheadline26" class="outline-3">
-<h3 id="orgheadline26">Asserts/Inspectors</h3>
-<div class="outline-text-3" id="text-orgheadline26">
-</div><ul class="org-ul"><li><a id="orgheadline24"></a><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors">Inspectors</a><br  /><div class="outline-text-4" id="text-orgheadline24">
+<div id="outline-container-orgheadline25" class="outline-3">
+<h3 id="orgheadline25">Asserts/Inspectors</h3>
+<div class="outline-text-3" id="text-orgheadline25">
+<div class="org-src-container">
+
+<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">Assertions</span>.<span style="color: #0000FF;">_</span>
+<span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">left</span> <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">2</span>
+<span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">right</span> <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">1</span>
+assert(left == right)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgheadline46" class="outline-3">
+<h3 id="orgheadline46">ScalaTest in detail (mostly with FunSpec)</h3>
+<div class="outline-text-3" id="text-orgheadline46">
+</div><ul class="org-ul"><li><a id="orgheadline27"></a>Informers, Documenters, Notifiers, Alerters<br  /><ul class="org-ul"><li><a id="orgheadline26"></a><a href="../src/test/scala/testingscala/report/ReportOnSpec.scala">ReportOnSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline26">
 <ul class="org-ul">
-<li>Provides nestable inspector methods (or just inspectors) that enable assertions to be<br  />
-made about collections.<br  /></li>
+<li><b>notifications</b> and <b>alerts</b> are reported immediately<br  /></li>
+<li><b>info</b> and <b>markup</b> are delayed until results of the test are known<br  /></li>
+<li>Note: path.FunSpec by default supports info, but not: markup, note, and alert.<br  /></li>
+<li>You won&rsquo;t see the nice notifications in Intellij (far as I know), but will in SBT<br  /></li>
+</ul>
+</div></li></ul></li>
+
+<li><a id="orgheadline30"></a>Tagging, pending, omitting tests<br  /><ul class="org-ul"><li><a id="orgheadline28"></a><a href="../src/test/scala/testingscala/certaintests/OmitSpec.scala">OmitSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline28">
+<ul class="org-ul">
+<li>How to ignore tests<br  /></li>
+<li>How to pend tests (that don&rsquo;t have a body yet)<br  /></li>
+</ul>
+</div></li>
+<li><a id="orgheadline29"></a><a href="../src/test/scala/testingscala/certaintests/TagSpec.scala">TagSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline29">
+<p>
+:- use tagging to selectively run different types of tests<br  />
+</p>
+</div></li></ul></li>
+
+<li><a id="orgheadline31"></a>Sharing fixtures between tests<br  /><div class="outline-text-4" id="text-orgheadline31">
+<p>
+There are several techniques that help you eliminate duplication in the setup/cleanup of<br  />
+tests.  Here are some of them:<br  />
+</p>
+</div>
+
+<ul class="org-ul"><li><a id="orgheadline32"></a><a href="../src/test/scala/testingscala/fixtures/ExampleWithFixture.scala">ExampleWithFixture.scala</a><br  /><div class="outline-text-5" id="text-orgheadline32">
+<ul class="org-ul">
+<li>The first test uses traits to set up mutable fixture objects using fixture-context<br  />
+objects<br  /></li>
+<li>The second one uses an anonymous object to do the same thing using get-fixture methods<br  /></li>
+<li>Using traits seems more elegant<br  /></li>
+<li>Also demonstrating <b>mixing in the BeforeAndAfter trait</b> that can be used to do setup and<br  />
+tear-down of common fixture.<br  /></li>
+</ul>
+</div></li></ul></li>
+
+<li><a id="orgheadline34"></a>Loaning fixtures<br  /><ul class="org-ul"><li><a id="orgheadline33"></a><a href="../src/test/scala/testingscala/fixtures/LoanFixtureSpec.scala">LoanFixtureSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline33">
+<ul class="org-ul">
+<li>roll your own fixtures as methods that take a closure as an argument.  In your test you<br  />
+call these methods and make the body of the test a closure you pass back into the<br  />
+fixture<br  /></li>
+</ul>
+</div></li></ul></li>
+
+<li><a id="orgheadline38"></a>Using WithFixture<br  /><ul class="org-ul"><li><a id="orgheadline35"></a><a href="../src/test/scala/testingscala/fixtures/WithFixtureNoArgSpec.scala">WithFixtureNoArgSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline35">
+<ul class="org-ul">
+<li>set-up fixture methods that loan themselves to the test<br  /></li>
+<li>just by overriding WithFixture(test: NoArgTest)  you can define setup and cleanup code<br  />
+in one place, and the test framework calls that automatically for every test<br  /></li>
+</ul>
+</div></li>
+
+<li><a id="orgheadline36"></a><a href="../src/test/scala/testingscala/fixtures/WithFixtureOneArgSpec.scala">WithFixtureOneArgSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline36">
+<ul class="org-ul">
+<li>extends fixture.FunSpec<br  /></li>
+<li>you can set up a fixture in your test class:<br  />
+<ul class="org-ul">
+<li>define FixtureParam class<br  /></li>
+<li>implement withFixture(test: OneArgTest)<br  /></li>
+</ul></li>
+<li>it&rsquo;s more elegant than the previous techniques we&rsquo;ve used<br  /></li>
+</ul>
+</div></li>
+
+<li><a id="orgheadline37"></a><a href="../src/test/scala/testingscala/fixtures/WithFixtureTraitOneArgSpec.scala">WithFixtureTraitOneArgSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline37">
+<ul class="org-ul">
+<li>To share fixtures <b>across classes</b>, define FixtureParam and withFixture in a trait, and<br  />
+mix it in any test classes that need this fixture.<br  /></li>
+<li>brief explanation of <a href="http://stackoverflow.com/questions/8073263/explicit-self-references-with-no-type-difference-with-this">explict self-reference</a><br  /></li>
+<li>&ldquo;it&rdquo; returns an object that registers the test, and when &ldquo;apply&rdquo;-ing it can take a<br  />
+FixtureParam as a argument (fixture.FunSpecLike.ItWord)<br  /></li>
+</ul>
+</div></li></ul></li>
+<li><a id="orgheadline39"></a>Assertions<br  /><div class="outline-text-4" id="text-orgheadline39">
+<ul class="org-ul">
+<li>Basic scalatest <a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions">Assertions</a> that are move informative than scala&rsquo;s built-in assertions<br  /></li>
+</ul>
+</div>
+
+<ul class="org-ul"><li><a id="orgheadline40"></a><a href="../src/test/scala/testingscala/asserts/AssertsSpec.scala">AssertsSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline40">
+<ul class="org-ul">
+<li>assert, assertResult<br  /></li>
+<li>assume, cancel<br  /></li>
+</ul>
+</div></li>
+
+<li><a id="orgheadline41"></a><a href="../src/test/scala/testingscala/asserts/SuperSafeSpec.scala">SuperSafeSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline41">
+<ul class="org-ul">
+<li>it catches some comparisons that scala would otherwise allow by looking more closely at<br  />
+the types being compared<br  /></li>
+<li>as a compiler plugin it gives you very useful information at compile time; and gives you<br  />
+a nice readable description of the problem<br  /></li>
+<li>For more details see: <a href="http://www.artima.com/supersafe_user_guide.html">SuperSafe User Guide</a>.<br  /></li>
+</ul>
+</div></li>
+
+<li><a id="orgheadline42"></a><a href="../src/test/scala/testingscala/asserts/ScalacticSpec.scala">ScalacticSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline42">
+<ul class="org-ul">
+<li>This library that&rsquo;s part of ScalaTest helps you normalize objects (usually for comparison)<br  /></li>
+<li>It can also help you get better errors when you compare the wrong things <a href="http://www.scalactic.org/user_guide/ConstrainedEquality">(constrained equality)</a>.<br  /></li>
+</ul>
+</div></li></ul></li>
+
+<li><a id="orgheadline43"></a>Inspectors<br  /><div class="outline-text-4" id="text-orgheadline43">
+<ul class="org-ul">
+<li><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors">Inspectors</a> provide methods that enable assertions to be made about collections.<br  /></li>
 </ul>
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
@@ -772,7 +913,7 @@ made about collections.<br  /></li>
 <tr>
 <td class="org-left">forAll</td>
 <td class="org-left">&#xa0;</td>
-<td class="org-left">succeeds if the assertion holds true for every element</td>
+<td class="org-left">succeeds if the assertion holds true for every element (report just the first failure)</td>
 </tr>
 
 <tr>
@@ -802,7 +943,7 @@ made about collections.<br  /></li>
 <tr>
 <td class="org-left">forEvery</td>
 <td class="org-left">&#xa0;</td>
-<td class="org-left">same as forAll, but lists all failing elements if it fails (forAll just reports the first)</td>
+<td class="org-left">same as forAll, but lists all failing elements if it fails</td>
 </tr>
 
 <tr>
@@ -815,152 +956,69 @@ made about collections.<br  /></li>
 
 <div class="org-src-container">
 
-<pre class="src src-scala">scala&gt; <span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #0000FF;">_</span>
-<span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #0000FF;">_</span>
-scala&gt; <span style="color: #0000FF;">import</span> <span style="color: #D0372D;">Assertions</span>.<span style="color: #0000FF;">_</span>
+<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #0000FF;">_</span>
 <span style="color: #0000FF;">import</span> <span style="color: #D0372D;">Assertions</span>.<span style="color: #0000FF;">_</span>
-
-scala&gt; <span style="color: #0000FF;">import</span> <span style="color: #D0372D;">Inspectors</span>.<span style="color: #0000FF;">_</span>
 <span style="color: #0000FF;">import</span> <span style="color: #D0372D;">Inspectors</span>.<span style="color: #0000FF;">_</span>
 
-scala&gt; <span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">xs</span> <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">List</span>(<span style="color: #D0372D;">1</span>, <span style="color: #D0372D;">2</span>, <span style="color: #D0372D;">3</span>, <span style="color: #D0372D;">4</span>, <span style="color: #D0372D;">5</span>)
-xs<span style="color: #0000FF;">:</span> <span style="color: #6434A3;">List</span>[<span style="color: #D0372D;">Int</span>] <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">List</span>(<span style="color: #D0372D;">1</span>, <span style="color: #D0372D;">2</span>, <span style="color: #D0372D;">3</span>, <span style="color: #D0372D;">4</span>, <span style="color: #D0372D;">5</span>)
+<span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">xs</span> <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">List</span>(<span style="color: #D0372D;">1</span>, <span style="color: #D0372D;">2</span>, <span style="color: #D0372D;">3</span>, <span style="color: #D0372D;">4</span>, <span style="color: #D0372D;">5</span>)
+forAll (xs) { x <span style="color: #0000FF;">=&gt;</span> assert(x &gt; <span style="color: #D0372D;">0</span>) }  <span style="color: #8D8D84;">// </span><span style="color: #8D8D84; font-style: italic;">assert on every element of the collection</span>
 </pre>
 </div>
 </div></li>
-<li><a id="orgheadline25"></a><a href="http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions">Assertions</a><br  /><div class="outline-text-4" id="text-orgheadline25">
-<div class="org-src-container">
 
-<pre class="src src-scala"><span style="color: #0000FF;">import</span> org.scalatest.<span style="color: #D0372D;">Assertions</span>.<span style="color: #0000FF;">_</span>
-<span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">left</span> <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">2</span>
-<span style="color: #0000FF;">val</span> <span style="color: #BA36A5;">right</span> <span style="color: #0000FF;">=</span> <span style="color: #D0372D;">1</span>
-assert(left == right)
-</pre>
-</div>
-</div></li></ul>
-</div>
-
-
-<div id="outline-container-orgheadline44" class="outline-3">
-<h3 id="orgheadline44">ScalaTest in detail (with FunSpec)</h3>
-<div class="outline-text-3" id="text-orgheadline44">
-</div><ul class="org-ul"><li><a id="orgheadline28"></a>Informers, Documenters, Notifiers, Alerters<br  /><ul class="org-ul"><li><a id="orgheadline27"></a><a href="../src/test/scala/testingscala/report/ReportOnSpec.scala">ReportOnSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline27">
+<li><a id="orgheadline44"></a>Using Matchers<br  /><div class="outline-text-4" id="text-orgheadline44">
 <ul class="org-ul">
-<li><b>notifications</b> and <b>alerts</b> are reported immediately<br  /></li>
-<li><b>info</b> and <b>markup</b> are delayed until results of the test are known<br  /></li>
-<li>Note: path.FunSpec by default supports info, but not: markup, note, and alert.<br  /></li>
-<li>You won&rsquo;t see the nice notifications in Intellij (far as I know), but will in SBT<br  /></li>
-</ul>
-</div></li></ul></li>
-
-<li><a id="orgheadline31"></a>Tagging, pending, omitting tests<br  /><ul class="org-ul"><li><a id="orgheadline29"></a><a href="../src/test/scala/testingscala/certaintests/OmitSpec.scala">OmitSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline29">
-<ul class="org-ul">
-<li>How to ignore tests<br  /></li>
-<li>How to pend tests (that don&rsquo;t have a body yet)<br  /></li>
-</ul>
-</div></li>
-<li><a id="orgheadline30"></a><a href="../src/test/scala/testingscala/certaintests/TagSpec.scala">TagSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline30">
-<p>
-:- use tagging to selectively run different types of tests<br  />
-</p>
-</div></li></ul></li>
-
-<li><a id="orgheadline32"></a>Sharing fixtures between tests<br  /><div class="outline-text-4" id="text-orgheadline32">
-<p>
-There are several techniques that help you eliminate duplication in the setup/cleanup of<br  />
-tests.  Here are some of them:<br  />
-</p>
-</div>
-
-<ul class="org-ul"><li><a id="orgheadline33"></a><a href="../src/test/scala/testingscala/fixtures/ExampleWithFixture.scala">ExampleWithFixture.scala</a><br  /><div class="outline-text-5" id="text-orgheadline33">
-<ul class="org-ul">
-<li>The first test uses traits to set up mutable fixture objects using fixture-context<br  />
-objects<br  /></li>
-<li>The second one uses an anonymous object to do the same thing using get-fixture methods<br  /></li>
-<li>Using traits seems more elegant<br  /></li>
-<li>Also demonstrating <b>mixing in the BeforeAndAfter trait</b> that can be used to do setup and<br  />
-tear-down of common fixture.<br  /></li>
-</ul>
-</div></li></ul></li>
-
-<li><a id="orgheadline35"></a>Loaning fixtures<br  /><ul class="org-ul"><li><a id="orgheadline34"></a><a href="../src/test/scala/testingscala/fixtures/LoanFixtureSpec.scala">LoanFixtureSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline34">
-<ul class="org-ul">
-<li>roll your own fixtures as methods that take a closure as an argument.  In your test you<br  />
-call these methods and make the body of the test a closure you pass back into the<br  />
-fixture<br  /></li>
-</ul>
-</div></li></ul></li>
-
-<li><a id="orgheadline39"></a>Using WithFixture<br  /><ul class="org-ul"><li><a id="orgheadline36"></a><a href="../src/test/scala/testingscala/fixtures/WithFixtureNoArgSpec.scala">WithFixtureNoArgSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline36">
-<ul class="org-ul">
-<li>set-up fixture methods that loan themselves to the test<br  /></li>
-<li>just by overriding WithFixture(test: NoArgTest)  you can define setup and cleanup code<br  />
-in one place, and the test framework calls that automatically for every test<br  /></li>
-</ul>
-</div></li>
-
-<li><a id="orgheadline37"></a><a href="../src/test/scala/testingscala/fixtures/WithFixtureOneArgSpec.scala">WithFixtureOneArgSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline37">
-<ul class="org-ul">
-<li>extends fixture.FunSpec<br  /></li>
-<li>you can set up a fixture in your test class:<br  />
-<ul class="org-ul">
-<li>define FixtureParam class<br  /></li>
-<li>implement withFixture(test: OneArgTest)<br  /></li>
-</ul></li>
-<li>it&rsquo;s more elegant than the previous techniques we&rsquo;ve used<br  /></li>
-</ul>
-</div></li>
-
-<li><a id="orgheadline38"></a><a href="../src/test/scala/testingscala/fixtures/WithFixtureTraitOneArgSpec.scala">WithFixtureTraitOneArgSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline38">
-<ul class="org-ul">
-<li>To share fixtures <b>across classes</b>, define FixtureParam and withFixture in a trait, and<br  />
-mix it in any test classes that need this fixture.<br  /></li>
-<li>brief explanation of <a href="http://stackoverflow.com/questions/8073263/explicit-self-references-with-no-type-difference-with-this">explict self-reference</a><br  /></li>
-<li>&ldquo;it&rdquo; returns an object that registers the test, and when &ldquo;apply&rdquo;-ing it can take a<br  />
-FixtureParam as a argument (fixture.FunSpecLike.ItWord)<br  /></li>
-</ul>
-</div></li></ul></li>
-
-<li><a id="orgheadline42"></a>Assertions<br  /><ul class="org-ul"><li><a id="orgheadline40"></a><a href="../src/test/scala/testingscala/asserts/AssertsSpec.scala">AssertsSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline40">
-<ul class="org-ul">
-<li>assert, assertResult<br  /></li>
-<li>assume, cancel<br  /></li>
-</ul>
-</div></li>
-
-<li><a id="orgheadline41"></a><a href="../src/test/scala/testingscala/asserts/SuperSafeSpec.scala">SuperSafeSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline41">
-<ul class="org-ul">
-<li>it catches some comparisons that scala would otherwise allow by looking more closely at<br  />
-the types being compared<br  /></li>
-<li>as a compiler plugin it gives you very useful information at compile time; and gives you<br  />
-a nice readable description of the problem<br  /></li>
-<li>For more details see: <a href="http://www.scalatest.org/supersafe">SuperSafe</a><br  /></li>
-</ul>
-</div></li></ul></li>
-
-<li><a id="orgheadline43"></a>Using Matchers<br  /><div class="outline-text-4" id="text-orgheadline43">
-<ul class="org-ul">
-<li>fix-in trait scalatest.Matches<br  /></li>
+<li>mix-in trait scalatest.Matches<br  /></li>
 <li>there are matchers in the scalatest.matchers package, but those appear to be deprecated<br  /></li>
 <li>Good examples on the <a href="http://www.scalatest.org/user_guide/using_matchers">ScalaTest Matches</a>; will not duplicate those.<br  /></li>
 </ul>
-</div></li></ul>
 </div>
 
-
-<div id="outline-container-orgheadline45" class="outline-3">
-<h3 id="orgheadline45">Mocking with ScalaTest</h3>
-</div>
-
-
-<div id="outline-container-orgheadline46" class="outline-3">
-<h3 id="orgheadline46">ScalaCheck</h3>
+<ul class="org-ul"><li><a id="orgheadline45"></a><a href="../src/test/scala/testingscala/asserts/CoolMatchersSpec.scala">CoolMatchersSpec.scala</a><br  /><div class="outline-text-5" id="text-orgheadline45">
+<ul class="org-ul">
+<li>to see some of the matchers I found most useful or interesting<br  /></li>
+</ul>
+</div></li></ul></li></ul>
 </div>
 
 
 <div id="outline-container-orgheadline47" class="outline-3">
-<h3 id="orgheadline47">What&rsquo;s coming up in ScalaTest 3.0</h3>
+<h3 id="orgheadline47">ScalaCheck</h3>
 <div class="outline-text-3" id="text-orgheadline47">
+<p>
+<a href="https://www.scalacheck.org/">ScalaCheck</a> is a testing library that automates test data generation, and performs<br  />
+property-based tests (explain what this means)<br  />
+</p>
+
+<ul class="org-ul">
+<li>There&rsquo;s a very useful <a href="https://github.com/rickynils/scalacheck/blob/master/doc/UserGuide.md">User guide</a>.<br  /></li>
+</ul>
+
+<p>
+To learn more about property-based testing I should also:<br  />
+</p>
+<ul class="org-ul">
+<li>watch: <a href="https://yow.eventer.com/yow-lambda-jam-2015-1305/practical-property-based-testing-by-charles-o-farrell-1884">Practical Property-Based Testing</a> <br  /></li>
+<li>watch: <a href="https://www.youtube.com/watch?v=shngiiBfD80">Property-Based Testing for better Code</a><br  /></li>
+</ul>
+</div>
+
+<ul class="org-ul"><li><a id="orgheadline53"></a>Concepts<br  /><ul class="org-ul"><li><a id="orgheadline48"></a>Properties<br  /></li>
+<li><a id="orgheadline49"></a>Generators<br  /></li>
+<li><a id="orgheadline50"></a>Test Execution<br  /></li>
+<li><a id="orgheadline51"></a>Test Case Minimisation<br  /></li>
+<li><a id="orgheadline52"></a>Stateful Testing<br  /></li></ul></li></ul>
+</div>
+
+<div id="outline-container-orgheadline54" class="outline-3">
+<h3 id="orgheadline54">Miscellaneous Other Things</h3>
+<div class="outline-text-3" id="text-orgheadline54">
+<ul class="org-ul">
+<li>Integration with Selenium, junit, etc.<br  /></li>
+</ul>
+</div>
+
+<ul class="org-ul"><li><a id="orgheadline55"></a>What&rsquo;s coming up in ScalaTest 3.0<br  /><div class="outline-text-4" id="text-orgheadline55">
 <ul class="org-ul">
 <li>now fully support Scala.js<br  /></li>
 <li><b>AsyncFunSuite</b>, <b>AsyncFunSpec</b>, <b>AsyncFlatSpec</b>, <b>AsyncFreeSpec</b>, <b>AsyncWordspec</b>, and<br  />
@@ -969,34 +1027,33 @@ a nice readable description of the problem<br  /></li>
 <b>allElementsOf</b>, <b>inOrderElementsOf</b><br  /></li>
 <li>Added overloaded <b>exists</b> and <b>forEvery</b> methods to TableDrivenPropertyChecks.<br  /></li>
 </ul>
-</div>
-</div>
+</div></li>
 
-
-<div id="outline-container-orgheadline48" class="outline-3">
-<h3 id="orgheadline48">About the Scalactic library</h3>
-<div class="outline-text-3" id="text-orgheadline48">
+<li><a id="orgheadline56"></a>About the Scalactic library<br  /><div class="outline-text-4" id="text-orgheadline56">
 <p>
 TODO: describe it.. what&rsquo;s useful in it?<br  />
 </p>
 </div>
 
-<ul class="org-ul"><li><a id="orgheadline49"></a>Version notes<br  /><div class="outline-text-4" id="text-orgheadline49">
+<ul class="org-ul"><li><a id="orgheadline57"></a>Version notes<br  /><div class="outline-text-5" id="text-orgheadline57">
 <ul class="org-ul">
 <li>In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with &ldquo;galactic&rdquo;).<br  /></li>
 <li>in 3.0 support Scala.JS<br  /></li>
 </ul>
-</div></li></ul>
+</div></li></ul></li></ul>
 </div>
 </div>
 
 
-<div id="outline-container-orgheadline51" class="outline-2">
-<h2 id="orgheadline51">Specs2</h2>
-<div class="outline-text-2" id="text-orgheadline51">
+<div id="outline-container-orgheadline59" class="outline-2">
+<h2 id="orgheadline59">Specs2</h2>
+<div class="outline-text-2" id="text-orgheadline59">
 <ul class="org-ul">
-<li>brief examples<br  /></li>
-<li>cover if time allows<br  /></li>
+<li>Lots of examples here: <a href="https://github.com/etorreborre/specs2/tree/SPECS2-3.8.4/examples/src/test/scala/examples">etorreborre/specs2</a>. A few to look at:<br  />
+<ul class="org-ul">
+<li><a href="https://github.com/etorreborre/specs2/blob/SPECS2-3.8.4/examples/src/test/scala/examples/HelloWorldSpec.scala">HelloWorldSpec.scala</a> - to get an idea<br  /></li>
+<li><a href="https://github.com/etorreborre/specs2/blob/SPECS2-3.8.4/examples/src/test/scala/examples/StackSpec.scala">StackSpec.scala</a> - to see a more sophisticated examples<br  /></li>
+</ul></li>
 </ul>
 </div>
 </div>
@@ -1004,7 +1061,7 @@ TODO: describe it.. what&rsquo;s useful in it?<br  />
 <div id="postamble" class="status">
 <p class="date">Date: July 11, 2016</p>
 <p class="author">Author: Ovi Sofariu</p>
-<p class="date">Created: 2016-07-07 Thu 08:37</p>
+<p class="date">Created: 2016-07-08 Fri 07:43</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

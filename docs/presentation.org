@@ -8,6 +8,17 @@
 
 You can follow this presentation at: https://osofariu.github.io/preso/presentation.html
 
+
+* Introduction
+
+- General setup, and getting started
+- Mostly covering ScalaTest
+  - flavors of tests
+  - practices for re-using fixtures
+  - asserts, matchers, etc.
+- ScalaCheck
+
+
 * SBT Setup
 
 ** Setting-up the project in build.sbt
@@ -21,7 +32,9 @@ libraryDependencies ++=  Seq(
 
 
 ** Setting-up Super-safe
+
 [[http://www.scalatest.org/supersafe][SuperSafe]] is a scala compiler plugin that catches certain issues at compile-time.
+- Note that *I have turned it off in my project for now.*
 
 *** add plugin for super-safe in project/plugins.sbt
 #+begin_example
@@ -75,6 +88,7 @@ $ echo "resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/rel
 
 
 ** SBT Tasks (from within sbt)
+
 *** *test*
 - The test task accepts no command line arguments and runs all tests
 
@@ -444,33 +458,6 @@ Feature: TV power button
 
 
 ** Asserts/Inspectors
-*** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors][Inspectors]]
-
-- Provides nestable inspector methods (or just inspectors) that enable assertions to be
-  made about collections.
-
-| forAll     |   | succeeds if the assertion holds true for every element                                     |
-| forAtLeast |   | succeeds if the assertion holds true for at least the specified number of elements         |
-| forAtMost  |   | succeeds if the assertion holds true for at most the specified number of elements          |
-| forBetween |   | succeeds if the assertion holds true for between the specified minimum and maximum         |
-|            |   | number of elements,  inclusive                                                             |
-| forEvery   |   | same as forAll, but lists all failing elements if it fails (forAll just reports the first) |
-| forExactly |   | succeeds if the assertion holds true for exactly the specified number of elements          |
-
-#+begin_src scala
-scala> import org.scalatest._
-import org.scalatest._
-scala> import Assertions._
-import Assertions._
-
-scala> import Inspectors._
-import Inspectors._
-
-scala> val xs = List(1, 2, 3, 4, 5)
-xs: List[Int] = List(1, 2, 3, 4, 5)
-
-#+end_src
-*** [[http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions][Assertions]]
 
 #+begin_src scala
   import org.scalatest.Assertions._
@@ -480,7 +467,7 @@ xs: List[Int] = List(1, 2, 3, 4, 5)
 #+end_src
 
 
-** ScalaTest in detail (with FunSpec)
+** ScalaTest in detail (mostly with FunSpec)
 *** Informers, Documenters, Notifiers, Alerters
 **** [[../src/test/scala/testingscala/report/ReportOnSpec.scala][ReportOnSpec.scala]]
 - *notifications* and *alerts* are reported immediately
@@ -532,8 +519,9 @@ tests.  Here are some of them:
 - brief explanation of [[http://stackoverflow.com/questions/8073263/explicit-self-references-with-no-type-difference-with-this][explict self-reference]]
 - "it" returns an object that registers the test, and when "apply"-ing it can take a
   FixtureParam as a argument (fixture.FunSpecLike.ItWord)
- 
 *** Assertions
+- Basic scalatest [[http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions][Assertions]] that are move informative than scala's built-in assertions
+
 **** [[../src/test/scala/testingscala/asserts/AssertsSpec.scala][AssertsSpec.scala]]
 - assert, assertResult
 - assume, cancel
@@ -543,27 +531,62 @@ tests.  Here are some of them:
   the types being compared
 - as a compiler plugin it gives you very useful information at compile time; and gives you
   a nice readable description of the problem
-- For more details see: [[http://www.scalatest.org/supersafe][SuperSafe]]
+- For more details see: [[http://www.artima.com/supersafe_user_guide.html][SuperSafe User Guide]].
+
+**** [[../src/test/scala/testingscala/asserts/ScalacticSpec.scala][ScalacticSpec.scala]]
+- This library that's part of ScalaTest helps you normalize objects (usually for comparison)
+- It can also help you get better errors when you compare the wrong things [[http://www.scalactic.org/user_guide/ConstrainedEquality][(constrained equality)]]. 
+ 
+*** Inspectors
+- [[http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors][Inspectors]] provide methods that enable assertions to be made about collections.
+
+| forAll     |   | succeeds if the assertion holds true for every element (report just the first failure) |
+| forAtLeast |   | succeeds if the assertion holds true for at least the specified number of elements     |
+| forAtMost  |   | succeeds if the assertion holds true for at most the specified number of elements      |
+| forBetween |   | succeeds if the assertion holds true for between the specified minimum and maximum     |
+|            |   | number of elements,  inclusive                                                         |
+| forEvery   |   | same as forAll, but lists all failing elements if it fails                             |
+| forExactly |   | succeeds if the assertion holds true for exactly the specified number of elements      |
+
+#+begin_src scala
+  import org.scalatest._
+  import Assertions._
+  import Inspectors._
+
+  val xs = List(1, 2, 3, 4, 5)
+  forAll (xs) { x => assert(x > 0) }  // assert on every element of the collection
+
+#+end_src
 
 *** Using Matchers
-- fix-in trait scalatest.Matches
+- mix-in trait scalatest.Matches
 - there are matchers in the scalatest.matchers package, but those appear to be deprecated
 - Good examples on the [[http://www.scalatest.org/user_guide/using_matchers][ScalaTest Matches]]; will not duplicate those.
   
+**** [[../src/test/scala/testingscala/asserts/CoolMatchersSpec.scala][CoolMatchersSpec.scala]]
+- to see some of the matchers I found most useful or interesting
   
-** Mocking with ScalaTest  
-
-- EasyMock and Mockito integrate with ScalaTest
-
-*** ScalaMock
-[[http://scalamock.org/]]
 
 ** ScalaCheck
+[[https://www.scalacheck.org][ScalaCheck]] is a testing library that automates test data generation, and performs
+property-based tests (explain what this means)
 
+- There's a very useful [[https://github.com/rickynils/scalacheck/blob/master/doc/UserGuide.md][User guide]].
 
-** Miscellaneous Things
+To learn more about property-based testing I should also:
+- watch: [[https://yow.eventer.com/yow-lambda-jam-2015-1305/practical-property-based-testing-by-charles-o-farrell-1884][Practical Property-Based Testing]] 
+- watch: [[https://www.youtube.com/watch?v=shngiiBfD80][Property-Based Testing for better Code]]
 
-- Integration with Selenium
+*** Concepts
+**** Properties
+**** Generators
+**** Test Execution
+**** Test Case Minimisation
+**** Stateful Testing
+
+** Miscellaneous Other Things
+
+- Integration with Selenium, junit, etc.
 
 *** What's coming up in ScalaTest 3.0
 - now fully support Scala.js
@@ -583,5 +606,6 @@ TODO: describe it.. what's useful in it?
 
   
 * Specs2
-- brief examples
-- cover if time allows
+- Lots of examples here: [[https://github.com/etorreborre/specs2/tree/SPECS2-3.8.4/examples/src/test/scala/examples][etorreborre/specs2]]. A few to look at:
+  - [[https://github.com/etorreborre/specs2/blob/SPECS2-3.8.4/examples/src/test/scala/examples/HelloWorldSpec.scala][HelloWorldSpec.scala]] - to get an idea
+  - [[https://github.com/etorreborre/specs2/blob/SPECS2-3.8.4/examples/src/test/scala/examples/StackSpec.scala][StackSpec.scala]] - to see a more sophisticated examples
