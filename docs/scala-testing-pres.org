@@ -565,28 +565,11 @@ tests.  Here are some of them:
   
 **** [[../src/test/scala/testingscala/asserts/CoolMatchersSpec.scala][CoolMatchersSpec.scala]]
 - to see some of the matchers I found most useful or interesting
-  
 
-** ScalaCheck
-[[https://www.scalacheck.org][ScalaCheck]] is a testing library that automates test data generation, and performs
-property-based tests (explain what this means)
-
-- There's a very useful [[https://github.com/rickynils/scalacheck/blob/master/doc/UserGuide.md][User guide]].
-
-To learn more about property-based testing I should also:
-- watch: [[https://yow.eventer.com/yow-lambda-jam-2015-1305/practical-property-based-testing-by-charles-o-farrell-1884][Practical Property-Based Testing]] 
-- watch: [[https://www.youtube.com/watch?v=shngiiBfD80][Property-Based Testing for better Code]]
-
-*** Concepts
-**** Properties
-**** Generators
-**** Test Execution
-**** Test Case Minimisation
-**** Stateful Testing
 
 ** Miscellaneous Other Things
 
-- Integration with Selenium, junit, etc.
+- ScalaTest and integrates with Selenium, junit, etc.
 
 *** What's coming up in ScalaTest 3.0
 - now fully support Scala.js
@@ -595,17 +578,52 @@ To learn more about property-based testing I should also:
 - *oneElementOf*, *noElementsOf*, *atLeastOneElementOf*, *atMostOneElementOf*,
   *allElementsOf*, *inOrderElementsOf*
 - Added overloaded *exists* and *forEvery* methods to TableDrivenPropertyChecks.
-
-*** About the Scalactic library
-
-TODO: describe it.. what's useful in it?
-
-**** Version notes
-- In 2.2.0, org.scalautils has been renamed to org.scalactic (rhymes with "galactic").
-- in 3.0 support Scala.JS
-
   
+
+* ScalaCheck
+
+[[https://www.scalacheck.org][ScalaCheck]] is a testing library that automates test data generation, and performs
+property-based tests.
+
+You define properties that specifies the *behavior of your code*, and ScalaCheck
+automatically (and randomly) generates data and runs it against your code.
+
+There's a very useful [[https://github.com/rickynils/scalacheck/blob/master/doc/UserGuide.md][User guide]] on their web site.
+
+** To learn more about property-based testing, check out the following videos:
+
+*** watch: [[https://yow.eventer.com/yow-lambda-jam-2015-1305/practical-property-based-testing-by-charles-o-farrell-1884][Practical Property-Based Testing]] 
+  - symmetry works great with property-based testing, even if you only need to go in one
+    direction
+  - model-based patterns: may need to tweak generated values to link things properly to
+    get usable data (see postal code example)
+  - idempotent tests are easy to write
+  - performance can be an issue, but you can configure how many times to run a test
+-  - invest time into writing good generators
+
+*** watch: [[https://www.youtube.com/watch?v=shngiiBfD80][Property-Based Testing for better Code]]
+  - contrasting "example-based test" with property-based tests (aka.: anecdotes vs
+    evidence)
+
+
+** Examples:
+
+*** [[../src/test/scala/testingscala/scalacheck/BasicPropertiesSpec.scala][BasicPropertiesSpec.scala]]
+- an examples of properties
+  
+*** [[../src/test/scala/testingscala/scalacheck/StringUtilsPropsSpec.scala][StringUtilsPropsSpec.scala]] and main class:  [[../src/main/scala/testingscala/scalacheck/StringUtils.scala][StringUtils.scala]]
+- slightly more complicated tests
+- using custom generators
+
+*** [[../src/test/scala/testingscala/scalacheck/GeneratorsSpec.scala][GeneratorsSpec.scala]]
+- more with custom generators
+
+*** [[../src/test/scala/testingscala/scalacheck/ScalaTestSpec.scala][ScalaTestSpec.scala]]
+- how to integrate ScalaCheck with ScalaTest
+
+
 * Specs2
+- I have no content that covers specs2
 - Lots of examples here: [[https://github.com/etorreborre/specs2/tree/SPECS2-3.8.4/examples/src/test/scala/examples][etorreborre/specs2]]. A few to look at:
   - [[https://github.com/etorreborre/specs2/blob/SPECS2-3.8.4/examples/src/test/scala/examples/HelloWorldSpec.scala][HelloWorldSpec.scala]] - to get an idea
   - [[https://github.com/etorreborre/specs2/blob/SPECS2-3.8.4/examples/src/test/scala/examples/StackSpec.scala][StackSpec.scala]] - to see a more sophisticated examples
