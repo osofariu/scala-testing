@@ -6,7 +6,7 @@
 #+HTML_HEAD: <link href="https://osofariu.github.io/css/custom.css" rel="stylesheet"></link>
 #+OPTIONS: H:2 num:nil toc:nil d:t *:t ':t \n:t @:t ::t |:t ^:nil _:nil
 
-You can follow this presentation at: https://osofariu.github.io/preso/presentation.html
+A styled version of this presentation can be found at: [[https://osofariu.github.io/scala_test_pres.html]]
 
 
 * Introduction
