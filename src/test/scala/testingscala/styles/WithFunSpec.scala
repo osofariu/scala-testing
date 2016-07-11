@@ -1,13 +1,13 @@
 package testingscala.styles
 
-import org.scalatest.{Matchers, OneInstancePerTest}
+import org.scalatest.{Matchers, path}
 
 import scala.collection.mutable
 
 // DO THIS:
 // remove ".path" below, to see how FunSpec is different from path.FunSpec:
 
-class WithFunSpec extends org.scalatest.path.FunSpec with Matchers {
+class WithFunSpec extends path.FunSpec with Matchers {
 
   val myAttire = mutable.Set[String]()
 
