@@ -1,10 +1,10 @@
 package testingscala.styles
 
-import org.scalatest.{Matchers, OneInstancePerTest, ParallelTestExecution}
+import org.scalatest.{Matchers, path}
 
 import scala.collection.mutable
 
-class WithFreeSpec extends org.scalatest.path.FreeSpec  with  Matchers {
+class WithFreeSpec extends path.FreeSpec  with  Matchers {
 
   val myAttire = mutable.Set[String]()
 
