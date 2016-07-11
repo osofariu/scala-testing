@@ -8,7 +8,7 @@ object GeneratorsSpec extends Properties("Generator Examples") {
   import org.scalacheck.Gen.choose
 
   val myGen = for {
-    n <- choose(1, 50)
+    n <- choose(1, 50)        // args: min..max
     m <- choose(n, 2 * n)
   } yield (n, m)
 
@@ -18,9 +18,9 @@ object GeneratorsSpec extends Properties("Generator Examples") {
       val n = o._1
       val m = o._2
 
-            (n >= 1) :| "n>=1" &&
+            (n >= 1) :| "n>=1"   &&
            (n <= 50) :| "n <=50" &&
-            (m >= n) :| "m >=n" &&
+            (m >= n) :| "m >=n"  &&
         (m <= 2 * n) :| "m <= 2+n"
     }
 }
