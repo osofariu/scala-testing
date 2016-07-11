@@ -22,6 +22,13 @@ class WithPropSpec  extends PropSpec with TableDrivenPropertyChecks with Matcher
     }
   }
 
+
+  property("an empty Set should have size 02") {
+    forEvery(examples) { set =>
+      set.size should be (0)
+    }
+  }
+
   property("invoking head on an empty set should produce NoSuchElementException") {
     forAll(examples) { set =>
       a [NoSuchElementException] should be thrownBy { set.head }

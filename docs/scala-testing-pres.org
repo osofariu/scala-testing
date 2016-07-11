@@ -49,26 +49,7 @@ libraryDependencies ++=  Seq(
 - I use it with IntelliJ, running sbt under IntelliJ terminal window
 
 
-** SBT command-line arguments
-
-| task           | description                                                                                   |
-|----------------+-----------------------------------------------------------------------------------------------|
-| clean          | Deletes all generated files (in the target directory).                                        |
-| compile        | Compiles the main sources (in src/main/scala and src/main/java                                |
-| test           | Compiles and runs all tests.                                                                  |
-| console        | Starts the Scala interpreter with a classpath including compiled sources and all dependencies |
-|                | To return to sbt, type :quit, Ctrl+D (Unix), or Ctrl+Z (Windows).                             |
-| run <argument> | Runs the main class for the project in the same virtual machine as sbt.                       |
-|                |                                                                                               |
-| package        | Creates a jar file containing the files in src/main/resources and the                         |
-|                | classes compiled from src/main/scala and src/main/java.                                       |
-| reload         | Reloads the build definition (build.sbt, project/*.scala, project/*.sbt files).               |
-|                | Needed if you change the build definition.                                                    |
-| help <command> | Displays detailed help for the specified command.                                             |
-|                | If no command is provided, displays brief descriptions of all commands.                       |
-
-
-** SBT Tasks (from within sbt)
+** SBT Tasks
 
 *** *test*
 - The test task accepts no command line arguments and runs all tests
@@ -104,9 +85,10 @@ testOnly *TagSpec -- -l SlowTest  // exclude these tags
 * ScalaTest
 
 ** Testing Styles
-[[http://www.scalatest.org/user_guide/selecting_a_style]]
+A short guide: [[http://www.scalatest.org/user_guide/selecting_a_style]]
 
 *** *FunSpec*
+
 - Familiar to those who are used to rSpec.
 - FunSpec allows you to nest your tests (like rSpec)
 
@@ -139,12 +121,13 @@ Output:
    - should produce NoSuchElementException when head is invoked
 #+end_example
 
-*Why is path.FunSpec is better than FunSpec?* See [[../src/test/scala/testingscala/styles/WithFunSpec.scala][WithFunSpec.scala]] for an example that demonstrates the difference
+Why is *path.FunSpec* is better than FunSpec? See [[../src/test/scala/testingscala/styles/WithFunSpec.scala][WithFunSpec.scala]] for an example that demonstrates the difference
 
 *** *FlatSpec*
-- you can't nest tests
-- you use verbs like: must, should, can to make your tests more meaningful
-- intuitive to use, but sometimes following the "subject should X" syntax is clumsy
+
+- You can't nest tests
+- You use verbs like: must, should, can to make your tests more meaningful
+- Intuitive and simple to use
 
 #+begin_src scala
     import org.scalatest.FlatSpec
@@ -171,11 +154,15 @@ An empty Set
 #+end_example
 
 *** *FreeSpec*
+
 - Facilitates a BDD-style, in which tests are nested inside text clauses denoted with the
   dash operator (-).
 - It enforces no structure, so you have maximum flexibility.
-- It has a version of path.FreeSpec just like FunSpec (extending OneInstancePerTest)
+- It has a version of path.FreeSpec just like FunSpec!
 - Lack of structure makes it attractive to non-English speakers
+- Unless you like typing the word "describe", why wouldn't you switch from FunSpec to FreeSpec?
+
+Here's an example [[../src/test/scala/testingscala/styles/WithFreeSpec.scala][WithFreeSpec.scala]] that you can contrast [[../src/test/scala/testingscala/styles/WithFunSpec.scala][WithFunSpec.scala]].
 
 #+begin_src scala
 import org.scalatest.FreeSpec
@@ -223,9 +210,11 @@ A Stack
 #+end_example
 
 *** *WordSpec*
+
 - Familiar to those who are used to specs or specs2
-- Very prescriptive
-- More wordy; see: [[https://github.com/osofariu/evercraft/blob/master/src/test/scala/katas/evercraft/AttackWordSpec.scala][AttackWordSpec]]
+- Syntax: "subject" when "condition" should "behavior" in { code block }
+- Very prescriptive and more wordy, but it can help you think through how to structure
+  your tests. See: [[https://github.com/osofariu/evercraft/blob/master/src/test/scala/katas/evercraft/AttackWordSpec.scala][AttackWordSpec]].
 
 #+begin_src scala
   import org.scalatest.WordSpec
@@ -260,7 +249,7 @@ A Stack
 
 *** *Spec*
 
-- It allows you to define tests as methods, which saves one function literal per test
+- It allows you to *define tests as methods*, which saves one function literal per test
   which translates into faster compile times and fewer generated class files, which can
   help minimize build times.
 
@@ -297,6 +286,7 @@ class SetSpec extends Spec {
 #+end_example
 
 *** *FunSuite*
+
 - For those who like xUnit-style tests
 
 #+begin_src scala
@@ -322,49 +312,11 @@ Output:
  - Invoking head on an empty Set should produce NoSuchElementException
 #+end_example
 
-*** *PropSpec*
-
-#+begin_src scala
-
-  import org.scalatest._
-  import prop._
-  import scala.collection.immutable._
-
-  class SetSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
-
-    val examples =
-      Table(
-        "set",
-        BitSet.empty,
-        HashSet.empty[Int],
-        TreeSet.empty[Int]
-      )
-
-    property("an empty Set should have size 0") {
-      forAll(examples) { set =>
-        set.size should be (0)
-      }
-    }
-
-    property("invoking head on an empty set should produce NoSuchElementException") {
-      forAll(examples) { set =>
-         a [NoSuchElementException] should be thrownBy { set.head }
-      }
-    }
-  }
-
-#+end_src
-
-Output:
-#+begin_example
- - an empty Set should have size 0
- - invoking head on an empty set should produce NoSuchElementException
-#+end_example
-
 *** *FeatureSpec*
 
 - Each test represents one *scenario* of a *feature*
-- With GivenWhenThen it looks like Gerkin syntax
+- With GivenWhenThen it looks like Gerkin syntax, but you can mix GivenWhenThen into other
+  testing styles.
 
 #+begin_src scala
 package org.scalatest.examples.featurespec
@@ -432,6 +384,48 @@ Feature: TV power button
     Given a TV set that is switched on
     When the power button is pressed
     Then the TV should switch off
+#+end_example
+
+*** *PropSpec*
+
+- This style looks a lot like a poor *man's ScalaCheck -- which is very powerful. 
+- It does not appear to me that it has any advantages over just using ScalaCheck.. 
+
+#+begin_src scala
+
+  import org.scalatest._
+  import prop._
+  import scala.collection.immutable._
+
+  class SetSpec extends PropSpec with TableDrivenPropertyChecks with Matchers {
+
+    val examples =
+      Table(
+        "set",
+        BitSet.empty,
+        HashSet.empty[Int],
+        TreeSet.empty[Int]
+      )
+
+    property("an empty Set should have size 0") {
+      forAll(examples) { set =>
+        set.size should be (0)
+      }
+    }
+
+    property("invoking head on an empty set should produce NoSuchElementException") {
+      forAll(examples) { set =>
+         a [NoSuchElementException] should be thrownBy { set.head }
+      }
+    }
+  }
+
+#+end_src
+
+Output:
+#+begin_example
+ - an empty Set should have size 0
+ - invoking head on an empty set should produce NoSuchElementException
 #+end_example
 
 
