@@ -12,16 +12,16 @@ class WithFixtureOneArgSpec extends fixture.FunSpec {
     val dbName = randomUUID.toString
     val database = createDb(dbName)
     try {
-      database.insert("table1", "ScalaTest is ")   // simulate initial setup
-      withFixture(test.toNoArgTest(database))
+      database.insert("table-key", "ScalaTest is ")   // simulate initial setup
+      withFixture(test.toNoArgTest(database))      // run the test
     }
-    finally removeDb(dbName)
+    finally removeDb(dbName)                       // clean-up after the test
   }
 
   describe("using fixtures I give my test access to setup it needs") {
     it("inserting a string in a table, I can find it in that table") { database =>
-      database.insert("table1", "readable!")
-      assert(database.select("table1") === "ScalaTest is readable!")
+      database.insert("table-key", "readable!")
+      assert(database.select("table-key") === "ScalaTest is readable!")
     }
   }
 }

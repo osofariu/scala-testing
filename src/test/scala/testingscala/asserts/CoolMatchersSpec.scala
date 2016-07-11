@@ -1,6 +1,7 @@
 package testingscala.asserts
 
 import testingscala.BaseSpec
+import org.scalactic.Equality
 
 class CoolMatchersSpec extends BaseSpec {
 
@@ -31,19 +32,13 @@ class CoolMatchersSpec extends BaseSpec {
       List(1, 2, 3, 4) should equal(List(1, 2, 3, 4))
       List(1, 2, 3, 4) should contain inOrderOnly(1, 2, 3, 4)
 
-      List(1, 3, 10) shouldBe sorted  /* this fails to compile when enabling Artima SuperSafe's if you haven't customized equality */
+      List(1, 3, 10) shouldBe sorted
+    }
 
+    it("you can customize equality and enforce type constraints") {
+      val hi = "Hi"
+      hi should === ("Hi")
     }
   }
 }
 
-
-/*
-
-
-List(1, 2, 3, 4, 5) should contain oneOf (5, 7, 9)
-List(1, 2, 3) should contain (2)
-5) Various cool tests
-
-List(1, 2, 3) shouldBe sorted
- */

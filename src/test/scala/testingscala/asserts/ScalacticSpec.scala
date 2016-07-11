@@ -34,9 +34,9 @@ class ScalacticSpec extends BaseSpec {
 
     it("you can customize equality to suit your needs") {
 
-      assert(120.0 === 120.4)
-      assert(120.9 === 120.0)
-      assert(120.4 === 120)
+      120.0 should === (120.4)
+      120.9 should === (120.0)
+      120.4 should === (120)
     }
   }
 

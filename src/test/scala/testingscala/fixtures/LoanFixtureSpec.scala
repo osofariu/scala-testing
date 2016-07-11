@@ -23,7 +23,7 @@ class LoanFixtureSpec extends BaseSpec {
     val writer = new FileWriter(file)
     try {
       writer.write("ScalaTest is ")
-      testCode(file, writer)
+      testCode(file, writer)        // execute the test code here
     }
     finally writer.close()
   }

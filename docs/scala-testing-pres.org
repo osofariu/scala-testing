@@ -67,7 +67,8 @@ testOnly testingscala.tags.FixtureWithSpec  testingscala.certaintests.TagSpec
 testOnly *FixtureWithSpec
 #+end_example
 
-- **use tags** to only run certain tests by tag:
+- **with tags** to only run certain tests by tag:
+  <<testOnly>>
 #+begin_example
 testOnly *TagSpec -- -n FastTest  // only run tests tagged as "FastTest"
 testOnly *TagSpec -- -n SlowTest -n FastTest // run both "SlowTest" and "FastTest" tags
@@ -442,19 +443,18 @@ Output:
 - How to ignore tests
 - How to pend tests (that don't have a body yet)
 **** [[../src/test/scala/testingscala/certaintests/TagSpec.scala][TagSpec.scala]]
-:- use tagging to selectively run different types of tests
+- use tagging to selectively run different types of tests
+- see examples under "SBT Tasks" above: [[testOnly]]
 
 *** Sharing fixtures between tests
 There are several techniques that help you eliminate duplication in the setup/cleanup of
-tests.  Here are some of them:
+tests. Here are some of them:
 
 **** [[../src/test/scala/testingscala/fixtures/ExampleWithFixture.scala][ExampleWithFixture.scala]]
-- The first test uses traits to set up mutable fixture objects using fixture-context
-  objects
-- The second one uses an anonymous object to do the same thing using get-fixture methods
-- Using traits seems more elegant
-- Also demonstrating *mixing in the BeforeAndAfter trait* that can be used to do setup and
-  tear-down of common fixture.
+- The first test uses traits to set up mutable fixture objects 
+- The second one uses an anonymous object to do the same thing 
+- the BeforeAndAfter trait can be used to do setup and tear-down of common fixture.
+- this is okay, but it doesn't allow you to perform setup and clean tasks
   
 *** Loaning fixtures
 **** [[../src/test/scala/testingscala/fixtures/LoanFixtureSpec.scala][LoanFixtureSpec.scala]]
@@ -485,7 +485,7 @@ tests.  Here are some of them:
 - Basic scalatest [[http://doc.scalatest.org/2.2.6/#org.scalatest.Assertions][Assertions]] that are move informative than scala's built-in assertions
 
 **** [[../src/test/scala/testingscala/asserts/AssertsSpec.scala][AssertsSpec.scala]]
-- assert, assertResult
+- assert, assertResult -- more informative than scala's assert.
 - assume, cancel
 
 **** [[../src/test/scala/testingscala/asserts/SuperSafeSpec.scala][SuperSafeSpec.scala]]
@@ -497,8 +497,9 @@ tests.  Here are some of them:
 
 **** [[../src/test/scala/testingscala/asserts/ScalacticSpec.scala][ScalacticSpec.scala]]
 - This library that's part of ScalaTest helps you normalize objects (usually for comparison)
-- It can also help you get better errors when you compare the wrong things [[http://www.scalactic.org/user_guide/ConstrainedEquality][(constrained equality)]]. 
- 
+  - example of 
+- It can help you get better errors when you compare the wrong things [[http://www.scalactic.org/user_guide/ConstrainedEquality][(constrained equality)]].
+
 *** Inspectors
 - [[http://doc.scalatest.org/2.2.6/#org.scalatest.Inspectors][Inspectors]] provide methods that enable assertions to be made about collections.
 
@@ -526,12 +527,15 @@ tests.  Here are some of them:
 - Good examples on the [[http://www.scalatest.org/user_guide/using_matchers][ScalaTest Matches]]; will not duplicate those.
   
 **** [[../src/test/scala/testingscala/asserts/CoolMatchersSpec.scala][CoolMatchersSpec.scala]]
-- to see some of the matchers I found most useful or interesting
-
+- to see some of the matchers I found most interesting
+- you can also create custom matchers (see [[http://doc.scalatest.org/2.2.6/#org.scalatest.matchers.BeMatcher][an example]]) 
+  
 
 ** Miscellaneous Other Things
 
 - ScalaTest and integrates with Selenium, junit, etc.
+- ScalaMock is the standard Scala mocking library, though you can use mockito or easyMock
+  if you want.
 
 *** What's coming up in ScalaTest 3.0
 - now fully support Scala.js
@@ -584,8 +588,3 @@ There's a very useful [[https://github.com/rickynils/scalacheck/blob/master/doc/
 - how to integrate ScalaCheck with ScalaTest
 
 
-* Specs2
-- I have no content that covers specs2
-- Lots of examples here: [[https://github.com/etorreborre/specs2/tree/SPECS2-3.8.4/examples/src/test/scala/examples][etorreborre/specs2]]. A few to look at:
-  - [[https://github.com/etorreborre/specs2/blob/SPECS2-3.8.4/examples/src/test/scala/examples/HelloWorldSpec.scala][HelloWorldSpec.scala]] - to get an idea
-  - [[https://github.com/etorreborre/specs2/blob/SPECS2-3.8.4/examples/src/test/scala/examples/StackSpec.scala][StackSpec.scala]] - to see a more sophisticated examples
