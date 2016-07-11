@@ -6,7 +6,9 @@
 #+HTML_HEAD: <link href="https://osofariu.github.io/css/custom.css" rel="stylesheet"></link>
 #+OPTIONS: H:2 num:nil toc:nil d:t *:t ':t \n:t @:t ::t |:t ^:nil _:nil
 
-A styled version of this presentation can be found at: [[https://osofariu.github.io/scala_test_pres.html]
+A styled version of this presentation can be found at:
+
+ *[[https://osofariu.github.io/scala-testing-pres.html]]*
 
 
 * Introduction
@@ -98,6 +100,7 @@ testOnly *TagSpec -- -l SlowTest  // exclude these tags
 - The tests that have one or more *transitive dependencies*, maybe in a different project,
   recompiled.
 
+
 * ScalaTest
 
 ** Testing Styles
@@ -136,8 +139,7 @@ Output:
    - should produce NoSuchElementException when head is invoked
 #+end_example
 
-*Why is path.FunSpec is better than FunSpec?* See my _WithFunSpec_ for an example that
-demonstrates the difference
+*Why is path.FunSpec is better than FunSpec?* See [[../src/test/scala/testingscala/styles/WithFunSpec.scala][WithFunSpec.scala]] for an example that demonstrates the difference
 
 *** *FlatSpec*
 - you can't nest tests
@@ -222,9 +224,8 @@ A Stack
 
 *** *WordSpec*
 - Familiar to those who are used to specs or specs2
-
 - Very prescriptive
-- Quite a bit more wordy
+- More wordy; see: [[https://github.com/osofariu/evercraft/blob/master/src/test/scala/katas/evercraft/AttackWordSpec.scala][AttackWordSpec]]
 
 #+begin_src scala
   import org.scalatest.WordSpec
@@ -432,16 +433,6 @@ Feature: TV power button
     When the power button is pressed
     Then the TV should switch off
 #+end_example
-
-
-** Asserts/Inspectors
-
-#+begin_src scala
-  import org.scalatest.Assertions._
-  val left = 2
-  val right = 1
-  assert(left == right)
-#+end_src
 
 
 ** ScalaTest in detail (mostly with FunSpec)
