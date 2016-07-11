@@ -6,7 +6,7 @@
 #+HTML_HEAD: <link href="https://osofariu.github.io/css/custom.css" rel="stylesheet"></link>
 #+OPTIONS: H:2 num:nil toc:nil d:t *:t ':t \n:t @:t ::t |:t ^:nil _:nil
 
-A styled version of this presentation can be found at: [[https://osofariu.github.io/scala-testing-pres.html]]
+A styled version of this presentation can be found at: [[https://osofariu.github.io/scala_test_pres.html]
 
 
 * Introduction
@@ -19,9 +19,10 @@ A styled version of this presentation can be found at: [[https://osofariu.github
 - ScalaCheck
 
 
-* SBT Setup
+* SBT Setup & Running tests
 
 ** Setting-up the project in build.sbt
+
 #+begin_example
 libraryDependencies ++=  Seq(
   "org.scalatest"  %% "scalatest" % "3.0.0-RC3" % "test" withSources() withJavadoc(),
@@ -30,28 +31,6 @@ libraryDependencies ++=  Seq(
 )
 #+end_example
 
-
-** Setting-up Super-safe
-
-[[http://www.scalatest.org/supersafe][SuperSafe]] is a scala compiler plugin that catches certain issues at compile-time.
-- Note that *I have turned it off in my project for now.*
-
-*** add plugin for super-safe in project/plugins.sbt
-#+begin_example
-addSbtPlugin("com.artima.supersafe" % "sbtplugin" % "1.1.0-RC7")
-#+end_example
-
-*** outside of the project, add resolver:
-- If you want to import the project from GitHub into Intellij, *you need to do this step first*,
-  so it can find the plugin when setting up the project.
-
-#+begin_src sh
-$ cd ~/.sbt/0.13
-$ echo "resolvers += \"Artima Maven Repository\" at \"http://repo.artima.com/releases\"" >> global.sbt
-#+end_src
-
-
-* Running tests with SBT
 
 ** SBT basics
 *** You can *chain* multiple commands to run tasks in batch mode, in sequential order:
@@ -106,7 +85,6 @@ testOnly *FixtureWithSpec
 #+end_example
 
 - **use tags** to only run certain tests by tag:
-
 #+begin_example
 testOnly *TagSpec -- -n FastTest  // only run tests tagged as "FastTest"
 testOnly *TagSpec -- -n SlowTest -n FastTest // run both "SlowTest" and "FastTest" tags
@@ -114,13 +92,12 @@ testOnly *TagSpec -- -l SlowTest  // exclude tests tagged as "SlowTest"
 testOnly *TagSpec -- -l SlowTest  // exclude these tags
 #+end_example
 
-*** *testQuick* - like testOnly, but also takes into account additional filters:
-- The tests that failed in the previous run
-- The tests that were not run before
-- The tests that have one or more transitive dependencies, maybe in a different project,
+*** *testQuick* - like testOnly, but will *only* run tests that also match one of the following conditions:
+- The tests that *failed* in the previous run
+- The tests that *were not run* before
+- The tests that have one or more *transitive dependencies*, maybe in a different project,
   recompiled.
 
- 
 * ScalaTest
 
 ** Testing Styles
