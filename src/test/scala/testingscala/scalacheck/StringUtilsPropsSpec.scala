@@ -11,7 +11,6 @@ object StringUtilsPropsSpec extends Properties("StringUtils") {
     Prop.forAll(alphaStr, posNum[Int]) {
       (s: String, n: Int) =>
         val t = truncate(s, n)
-        val take = s.take(n)
         (s.length <= n && t == s) ||
           (s.length > n && (t == s.take(n)))
     }
@@ -25,7 +24,6 @@ object StringUtilsPropsSpec extends Properties("StringUtils") {
         }
         else {
           val t = sternTruncate(s, n)
-          val take = s.take(n)
           (s.length <= n && t == s) ||
             (s.length > n && (t == s.take(n)))
         }
